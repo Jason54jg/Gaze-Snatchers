@@ -29,6 +29,15 @@ Client de dev :
 ./gradlew :neoforge:runClient
 ```
 
+## Commandes (OP / niveau 2)
+
+| Commande | Description |
+|----------|-------------|
+| `/gazesnatchers spawn adult` | Spawn un Voleur de Regard devant vous |
+| `/gazesnatchers spawn baby` | Spawn un bébé |
+| `/gazesnatchers trigger_sleep` | Simule l'apparition au coucher (sans lit) |
+| `/gazesnatchers reload_config` | Recharge `config/gazesnatchers.json` |
+
 ## Configuration
 
 Fichier `config/gazesnatchers.json` (généré au premier lancement) :
@@ -40,6 +49,7 @@ Fichier `config/gazesnatchers.json` (généré au premier lancement) :
 | `minBabiesOnSplit` / `maxBabiesOnSplit` | 2 / 4 | Division à la mort |
 | `amuletStealReduction` | 0.55 | Ralentit le vol si amulette en inventaire |
 | `despawnAfterSteal` | true | Disparition après vol réussi |
+| `alwaysDropStolenFromCarrier` | false | Le bébé porteur droppe toujours l'item volé |
 
 ## Gameplay
 

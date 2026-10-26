@@ -2,7 +2,6 @@ package dev.gazesnatchers.entity;
 
 import dev.gazesnatchers.config.GazeSnatchersConfig;
 import dev.gazesnatchers.registry.ModEntities;
-import dev.gazesnatchers.registry.ModItems;
 import dev.gazesnatchers.registry.ModSounds;
 import dev.gazesnatchers.util.SunSensitiveEntity;
 import net.minecraft.server.level.ServerLevel;
@@ -75,12 +74,12 @@ public class BabyGazeSnatcherEntity extends Monster {
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
         RandomSource random = level.random;
-        int shards = 1 + random.nextInt(3);
-        this.spawnAtLocation(level, new ItemStack(ModItems.GAZE_SHARD, shards));
-
-        if (carriesStolenLoot() && random.nextDouble() < GazeSnatchersConfig.rareStolenItemDropChance()) {
-            this.spawnAtLocation(level, inheritedStolenItem.copy());
-            inheritedStolenItem = ItemStack.EMPTY;
+        if (carriesStolenLoot()) {
+            boolean always = GazeSnatchersConfig.alwaysDropStolenFromCarrier();
+            if (always || random.nextDouble() < GazeSnatchersConfig.rareStolenItemDropChance()) {
+                this.spawnAtLocation(level, inheritedStolenItem.copy());
+                inheritedStolenItem = ItemStack.EMPTY;
+            }
         }
     }
 

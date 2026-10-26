@@ -26,11 +26,23 @@ public final class GazeSnatchers {
         ModCreativeTabs.register();
 
         SleepWatcher.registerPlatformHooks();
+        registerPlatformCommands();
         LOGGER.info("Gaze Snatchers prêt (MC {}).", GazeSnatchersConstants.MINECRAFT_RANGE);
     }
 
     public static Identifier id(String path) {
         return Identifier.fromNamespaceAndPath(MOD_ID, path);
+    }
+
+    private static Runnable commandRegistrar = () -> {
+    };
+
+    public static void bindPlatformCommands(Runnable registrar) {
+        commandRegistrar = registrar;
+    }
+
+    private static void registerPlatformCommands() {
+        commandRegistrar.run();
     }
 
     private GazeSnatchers() {

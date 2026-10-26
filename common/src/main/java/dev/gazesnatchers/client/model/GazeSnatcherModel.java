@@ -18,10 +18,12 @@ public class GazeSnatcherModel extends EntityModel<LivingEntityRenderState> {
             GazeSnatchers.id("gaze_snatcher"), "main");
 
     private final ModelPart head;
+    private final ModelPart body;
 
     public GazeSnatcherModel(ModelPart root) {
         super(root);
         this.head = root.getChild("Head");
+        this.body = root.getChild("Body");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -63,8 +65,13 @@ public class GazeSnatcherModel extends EntityModel<LivingEntityRenderState> {
 
     @Override
     public void setupAnim(LivingEntityRenderState state) {
-        head.yRot = state.yRot * ((float) Math.PI / 180F);
-        head.xRot = state.xRot * ((float) Math.PI / 180F);
+        float yRot = state.yRot * ((float) Math.PI / 180F);
+        float xRot = state.xRot * ((float) Math.PI / 180F);
+        head.yRot = yRot;
+        head.xRot = xRot;
+        // Posture légèrement penchée (silhouette Blockbench).
+        body.xRot = 0.18F + xRot * 0.15F;
+        body.yRot = yRot * 0.25F;
     }
 
     public Identifier texture() {

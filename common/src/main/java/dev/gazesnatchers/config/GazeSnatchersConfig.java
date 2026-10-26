@@ -73,6 +73,10 @@ public final class GazeSnatchersConfig {
         return data.despawnAfterSteal;
     }
 
+    public static boolean alwaysDropStolenFromCarrier() {
+        return data.alwaysDropStolenFromCarrier;
+    }
+
     public static int stareDistance() {
         return data.stareDistance;
     }
@@ -89,6 +93,8 @@ public final class GazeSnatchersConfig {
         /** Chance qu'un bébé droppe un item « marqué volé » (loot bonus). */
         public double rareStolenItemDropChance = 0.04;
         public boolean despawnAfterSteal = true;
+        /** Si true, le bébé porteur droppe toujours l'item volé (sinon : rareStolenItemDropChance). */
+        public boolean alwaysDropStolenFromCarrier = false;
         /** Distance max pour rester devant le joueur endormi. */
         public int stareDistance = 12;
     }
