@@ -12,16 +12,16 @@ Les os exportés sont `Head`, `Body`, `LeftArm`, `RightArm`, `LeftLeg`, `RightLe
 - **Format** : Java Entity / Minecraft 1.21+
 - **Hiérarchie** : `Root` → `Head`, `Body`, `LeftArm`, `RightArm`, `LeftLeg`, `RightLeg`, puis les détails (sourcils, cornes, yeux saillants, collier, côtes, piques, paumes, doigts, pieds)
 - **Proportions** : tête 12×12×12, corps 6×20×4, bras 3×26×3, jambes 3×22×3. Les cornes dépassent d'environ 4 px, les doigts partent du poignet.
-- **Texture** : `assets/gazesnatchers/textures/entity/gaze_snatcher.png` (128×128)
+- **Texture** : `assets/gazesnatchers/textures/entity/gaze_snatcher.png` (512×512, 4 texels par pixel modèle)
 - **Yeux émissifs** : `gaze_snatcher_emissive.png`, branchés par `GazeSnatcherEyesLayer`
 
 ### Bébé (`baby_gaze_snatcher`)
 - **Hiérarchie** : `Root` → `Head`, `Body`, `Left_Foreleg`, `Right_Foreleg`, `Left_Hindleg`, `Right_Hindleg`, plus mâchoire, yeux saillants, cornes, queue en deux segments et nubs
-- **Texture** : `textures/entity/baby_gaze_snatcher.png` (64×64)
+- **Texture** : `textures/entity/baby_gaze_snatcher.png` (256×256, 4 texels par pixel modèle)
 
 ## Textures
 
-`gaze_snatcher.png` (128×128) et `baby_gaze_snatcher.png` (64×64) suivent le dépliage box-UV des `.bbmodel` : chair gris-noir veinée, cornes et côtes osseuses, dents claires, orbites sombres. Les yeux saillants sont blancs à pupille verticale. Les PNG émissifs ne gardent que ces cubes d'yeux.
+`gaze_snatcher.png` (512×512) et `baby_gaze_snatcher.png` (256×256) suivent le dépliage box-UV, avec `addBox(..., 0.25, 0.25)` pour que chaque pixel modèle couvre 4 texels. Le grain est lissé (bruit bilinéaire), pas un damier. Chair gris-noir veinée, cornes et côtes osseuses, dents claires, orbites sombres. Les yeux saillants sont blancs à pupille verticale. Les PNG émissifs ne gardent que ces cubes d'yeux.
 
 ## Audio
 

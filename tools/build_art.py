@@ -26,6 +26,9 @@ JAVA = ROOT / "common/src/main/java/dev/gazesnatchers/client/model"
 BB = ROOT / "blockbench"
 GALLERY = ROOT / "docs/modrinth"
 NS = uuid.UUID("6f0c1a3e-9b24-4c1a-8f55-0a6e2d4b7c91")
+# 4 texels par pixel modèle. Le box-UV vanilla compte 1 texel par unité ;
+# addBox(..., texScale) compresse ce pas pour remplir la texture haute.
+TEX_DENSITY = 4
 
 
 def uid(name: str) -> str:
@@ -153,23 +156,65 @@ FACE_SHADES = {
 }
 
 
+def upsample_noise(rng: np.random.Generator, size: int, cells: int) -> np.ndarray:
+    """Bruit bilinéaire : les texels voisins varient ensemble, pas un à un."""
+    cells = max(2, cells)
+    coarse = rng.random((cells, cells)).astype(np.float32)
+    gy = np.linspace(0, cells - 1, size)
+    gx = np.linspace(0, cells - 1, size)
+    y0 = np.floor(gy).astype(np.int32)
+    x0 = np.floor(gx).astype(np.int32)
+    y1 = np.minimum(y0 + 1, cells - 1)
+    x1 = np.minimum(x0 + 1, cells - 1)
+    fy = (gy - y0).astype(np.float32)[:, None]
+    fx = (gx - x0).astype(np.float32)[None, :]
+    n00 = coarse[y0][:, x0]
+    n10 = coarse[y0][:, x1]
+    n01 = coarse[y1][:, x0]
+    n11 = coarse[y1][:, x1]
+    return n00 * (1 - fx) * (1 - fy) + n10 * fx * (1 - fy) + n01 * (1 - fx) * fy + n11 * fx * fy
+
+
+def scale_rect(rect: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
+    u, v, w, h = rect
+    return u * TEX_DENSITY, v * TEX_DENSITY, w * TEX_DENSITY, h * TEX_DENSITY
+
+
+def paint_slit(img, glow, u, v, w, h, light, dark) -> None:
+    if w < 2 or h < 2:
+        return
+    xs = np.arange(w, dtype=np.float32)[None, :]
+    center = (w - 1) / 2
+    slit = np.clip(1.0 - np.abs(xs - center) / max(w * 0.16, 1.5), 0, 1)
+    slit = slit * slit
+    base = img[v : v + h, u : u + w, :3].astype(np.float32)
+    img[v : v + h, u : u + w, :3] = np.clip(base * (1 - slit[..., None]) + np.array(dark) * slit[..., None], 0, 255).astype(np.uint8)
+    if glow is not None:
+        glow[v : v + h, u : u + w, 0] = light[0]
+        glow[v : v + h, u : u + w, 1] = light[1]
+        glow[v : v + h, u : u + w, 2] = light[2]
+        glow[v : v + h, u : u + w, 3] = np.clip(255 * (1 - slit), 0, 255).astype(np.uint8)
+
+
 def paint_texture(size: int, cubes: list[dict], eyes: list[dict], seed: int) -> tuple[np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
     img = np.zeros((size, size, 4), dtype=np.uint8)
     glow = np.zeros((size, size, 4), dtype=np.uint8)
-    noise = rng.random((size, size))
-    vein = rng.random((size, size))
+    broad = upsample_noise(rng, size, max(6, size // 48))
+    fine = upsample_noise(rng, size, max(12, size // 14))
+    noise = np.clip(0.82 * broad + 0.18 * fine, 0, 1)
+    vein = upsample_noise(rng, size, max(8, size // 18))
 
     def fill(rect, shade, vein_strength=0.35):
-        u, v, w, h = rect
+        u, v, w, h = scale_rect(rect)
         if w <= 0 or h <= 0:
             return
         patch = noise[v : v + h, u : u + w]
         veins = vein[v : v + h, u : u + w]
+        vein_mask = np.clip((veins - 0.64) * 5.0, 0, 1) ** 2
         base = np.array(shade, dtype=np.float32)
-        color = base * (0.82 + 0.28 * patch)[..., None]
-        color *= 1.0 - vein_strength * (veins > 0.86)[..., None]
-        color += np.array([18, 14, 26], dtype=np.float32) * ((veins > 0.93) & (veins < 0.97))[..., None]
+        color = base * (0.9 + 0.16 * patch)[..., None]
+        color *= 1.0 - vein_strength * 0.5 * vein_mask[..., None]
         color = np.clip(color, 0, 255).astype(np.uint8)
         img[v : v + h, u : u + w, :3] = color
         img[v : v + h, u : u + w, 3] = 255
@@ -179,41 +224,39 @@ def paint_texture(size: int, cubes: list[dict], eyes: list[dict], seed: int) -> 
         rects = box_uv_rects(cube["uv"][0], cube["uv"][1], cube["w"], cube["h"], cube["d"])
         if style == "glow":
             for face, rect in rects.items():
-                u, v, w, h = rect
+                u, v, w, h = scale_rect(rect)
                 img[v : v + h, u : u + w, :3] = (236, 244, 255)
                 img[v : v + h, u : u + w, 3] = 255
                 glow[v : v + h, u : u + w] = (255, 255, 255, 255)
-                if face == "front" and w >= 2 and h >= 2:
-                    px0 = u + w // 2
-                    img[v : v + h, px0 : px0 + 1, :3] = (18, 12, 24)
-                    glow[v : v + h, px0 : px0 + 1] = (0, 0, 0, 0)
+                if face == "front":
+                    paint_slit(img, glow, u, v, w, h, (255, 255, 255), (16, 10, 22))
             continue
         shades = FACE_SHADES.get(style, FACE_SHADES["flesh"])
         if style in ("tooth", "horn", "spike", "rib"):
             vein_strength = 0.12
         elif style in ("finger", "palm", "foot", "tail") or cube.get("limb"):
-            vein_strength = 0.4
+            vein_strength = 0.35
         elif style == "collar":
-            vein_strength = 0.55
+            vein_strength = 0.5
         else:
-            vein_strength = 0.3
+            vein_strength = 0.28
         for face, rect in rects.items():
             fill(rect, shades[face], vein_strength)
 
     for eye in eyes:
-        u, v, w, h = eye["rect"]
-        img[v : v + h, u : u + w, :3] = (12, 10, 16)
-        img[v : v + h, u : u + w, 3] = 255
-        for ex, ey, ew, eh in eye.get("sockets", []):
-            img[ey : ey + eh, ex : ex + ew, :3] = (8, 6, 12)
-            img[ey : ey + eh, ex : ex + ew, 3] = 255
+        u, v, w, h = scale_rect(eye["rect"])
+        face = img[v : v + h, u : u + w, :3].astype(np.float32) * 0.78
+        img[v : v + h, u : u + w, :3] = np.clip(face, 0, 255).astype(np.uint8)
+        for socket in eye.get("sockets", []):
+            su, sv, sw, sh = scale_rect(socket)
+            img[sv : sv + sh, su : su + sw, :3] = (8, 6, 12)
+            img[sv : sv + sh, su : su + sw, 3] = 255
         for ex, ey, ew, eh in eye.get("eyes", []):
-            img[ey : ey + eh, ex : ex + ew, :3] = (244, 248, 255)
-            glow[ey : ey + eh, ex : ex + ew] = (255, 255, 255, 255)
-            px0 = ex + ew // 2
-            img[ey : ey + eh, px0 : px0 + 1, :3] = (20, 16, 28)
-            glow[ey : ey + eh, px0 : px0 + 1] = (0, 0, 0, 0)
-        mx, my, mw, mh = eye["mouth"]
+            eu, ev, ew, eh = scale_rect((ex, ey, ew, eh))
+            img[ev : ev + eh, eu : eu + ew, :3] = (244, 248, 255)
+            glow[ev : ev + eh, eu : eu + ew] = (255, 255, 255, 255)
+            paint_slit(img, glow, eu, ev, ew, eh, (255, 255, 255), (20, 16, 28))
+        mx, my, mw, mh = scale_rect(eye["mouth"])
         img[my : my + mh, mx : mx + mw, :3] = (8, 6, 10)
     return img, glow
 
@@ -245,7 +288,7 @@ def cube_java(var: str, name: str, pivot, frm, to, uv) -> str:
         f'        PartDefinition {var} = parent.addOrReplaceChild("{name}", '
         f"CubeListBuilder.create().texOffs({uv[0]}, {uv[1]})"
         f".addBox({fnum(x)}, {fnum(y)}, {fnum(z)}, {fnum(w)}, {fnum(h)}, {fnum(d)}, "
-        f"new CubeDeformation(0.0F)), "
+        f"new CubeDeformation(0.0F), {fnum(1 / TEX_DENSITY)}, {fnum(1 / TEX_DENSITY)}), "
         f"PartPose.offset({fnum(ox)}, {fnum(oy)}, {fnum(oz)}));"
     )
 
@@ -258,7 +301,7 @@ def child_java(var: str, parent_var: str, name: str, parent_pivot, pivot, frm, t
         f'        PartDefinition {var} = {parent_var}.addOrReplaceChild("{name}", '
         f"CubeListBuilder.create().texOffs({uv[0]}, {uv[1]})"
         f".addBox({fnum(x)}, {fnum(y)}, {fnum(z)}, {fnum(w)}, {fnum(h)}, {fnum(d)}, "
-        f"new CubeDeformation(0.0F)), "
+        f"new CubeDeformation(0.0F), {fnum(1 / TEX_DENSITY)}, {fnum(1 / TEX_DENSITY)}), "
         f"PartPose.offset({fnum(ox - px)}, {fnum(oy - py)}, {fnum(oz - pz)}));"
     )
 
@@ -398,10 +441,29 @@ def baby_eyes(cubes):
     }]
 
 
+BB_FACE = {
+    "front": "north",
+    "back": "south",
+    "left": "east",
+    "right": "west",
+    "top": "up",
+    "bottom": "down",
+}
+
+
+def bb_faces(cube) -> dict:
+    rects = box_uv_rects(cube["uv"][0], cube["uv"][1], cube["w"], cube["h"], cube["d"])
+    faces = {}
+    for name, rect in rects.items():
+        u, v, w, h = scale_rect(rect)
+        faces[BB_FACE[name]] = {"uv": [u, v, u + w, v + h], "texture": 0}
+    return faces
+
+
 def bb_element(cube, texture_uuid: str) -> dict:
     return {
         "name": cube["bone"],
-        "box_uv": True,
+        "box_uv": False,
         "rescale": False,
         "locked": False,
         "from": list(cube["from"]),
@@ -412,7 +474,7 @@ def bb_element(cube, texture_uuid: str) -> dict:
         "uv_offset": list(cube["uv"]),
         "inflate": 0,
         "rotation": [0, 0, 0],
-        "faces": {},
+        "faces": bb_faces(cube),
         "type": "cube",
         "uuid": uid(cube.get("id", cube["bone"])),
     }
@@ -515,13 +577,13 @@ def build_bbmodel(spec: dict, texture_name: str, png_bytes: bytes) -> dict:
         "meta": {
             "format_version": "4.10",
             "model_format": "modded_entity",
-            "box_uv": True,
+            "box_uv": False,
         },
         "name": spec["name"],
         "model_identifier": spec["name"],
         "visible_box": [1, 1, 0],
         "variable_placeholders": "",
-        "resolution": {"width": spec["tex"], "height": spec["tex"]},
+        "resolution": {"width": spec["tex"] * TEX_DENSITY, "height": spec["tex"] * TEX_DENSITY},
         "elements": elements,
         "outliner": [root],
         "textures": [
@@ -531,10 +593,10 @@ def build_bbmodel(spec: dict, texture_name: str, png_bytes: bytes) -> dict:
                 "folder": "",
                 "namespace": "",
                 "id": "0",
-                "width": spec["tex"],
-                "height": spec["tex"],
-                "uv_width": spec["tex"],
-                "uv_height": spec["tex"],
+                "width": spec["tex"] * TEX_DENSITY,
+                "height": spec["tex"] * TEX_DENSITY,
+                "uv_width": spec["tex"] * TEX_DENSITY,
+                "uv_height": spec["tex"] * TEX_DENSITY,
                 "particle": False,
                 "use_as_default": True,
                 "render_mode": "default",
@@ -566,7 +628,7 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 
 /**
- * Import Blockbench ({layer}.bbmodel). La pose de repos vient du dépliage box-UV ;
+ * Import Blockbench ({layer}.bbmodel). texScale 0.25 : 4 texels par pixel modèle.
  * idle et walk reprennent les pistes du fichier.
  */
 public class {class_name} extends EntityModel<LivingEntityRenderState> {{
@@ -659,7 +721,7 @@ def adult_java(spec: dict) -> None:
         this.leftLeg.zRot = 0.0F;
         this.rightLeg.zRot = 0.0F;
 """
-    write_java("GazeSnatcherModel", "gaze_snatcher", spec["tex"], "\n".join(lines), fields, ctor, anim)
+    write_java("GazeSnatcherModel", "gaze_snatcher", spec["tex"] * TEX_DENSITY, "\n".join(lines), fields, ctor, anim)
 
 
 def baby_java(spec: dict) -> None:
@@ -728,7 +790,7 @@ def baby_java(spec: dict) -> None:
         this.leftFore.yRot = this.rightFore.yRot = this.leftHind.yRot = this.rightHind.yRot = 0.0F;
         this.leftFore.zRot = this.rightFore.zRot = this.leftHind.zRot = this.rightHind.zRot = 0.0F;
 """
-    write_java("BabyGazeSnatcherModel", "baby_gaze_snatcher", spec["tex"], "\n".join(lines), fields, ctor, anim)
+    write_java("BabyGazeSnatcherModel", "baby_gaze_snatcher", spec["tex"] * TEX_DENSITY, "\n".join(lines), fields, ctor, anim)
 
 
 def lowpass(samples: np.ndarray, alpha: float) -> np.ndarray:
@@ -879,7 +941,7 @@ def render_gallery(models: list[tuple[str, dict, np.ndarray, np.ndarray]]) -> No
         ])
         quads = []
         for face, (idx, normal) in specs.items():
-            u, v, w, h = rects[face]
+            u, v, w, h = scale_rect(rects[face])
             quads.append((corners[list(idx)], (u, v, u + w, v + h), np.array(normal, dtype=np.float64), texture))
         return quads
 
@@ -939,9 +1001,19 @@ def render_gallery(models: list[tuple[str, dict, np.ndarray, np.ndarray]]) -> No
                     uu = w0 * uvs[0, 0] + w1 * uvs[1, 0] + w2 * uvs[2, 0]
                     vv = w0 * uvs[0, 1] + w1 * uvs[1, 1] + w2 * uvs[2, 1]
                     tex_h, tex_w, _ = texture.shape
-                    ui = np.clip(uu.astype(int), 0, tex_w - 1)
-                    vi = np.clip(vv.astype(int), 0, tex_h - 1)
-                    sampled = texture[vi, ui].astype(np.float32)
+                    uu = np.clip(uu, 0, tex_w - 1.001)
+                    vv = np.clip(vv, 0, tex_h - 1.001)
+                    u0 = np.floor(uu).astype(np.int32)
+                    v0 = np.floor(vv).astype(np.int32)
+                    u1 = np.minimum(u0 + 1, tex_w - 1)
+                    v1 = np.minimum(v0 + 1, tex_h - 1)
+                    fu = (uu - u0)[..., None]
+                    fv = (vv - v0)[..., None]
+                    c00 = texture[v0, u0].astype(np.float32)
+                    c10 = texture[v0, u1].astype(np.float32)
+                    c01 = texture[v1, u0].astype(np.float32)
+                    c11 = texture[v1, u1].astype(np.float32)
+                    sampled = c00 * (1 - fu) * (1 - fv) + c10 * fu * (1 - fv) + c01 * (1 - fu) * fv + c11 * fu * fv
                     shade = sampled[:, :, :3] * light
                     nearer &= sampled[:, :, 3] > 16
                     if not np.any(nearer):
@@ -1020,7 +1092,7 @@ def prepare(spec: dict, eyes_fn, seed: int):
     paint_cubes = cubes + children
     assert_atlas(spec["tex"], paint_cubes)
     eyes = eyes_fn(cubes)
-    image, glow = paint_texture(spec["tex"], paint_cubes, eyes, seed)
+    image, glow = paint_texture(spec["tex"] * TEX_DENSITY, paint_cubes, eyes, seed)
     return spec, image, glow
 
 
