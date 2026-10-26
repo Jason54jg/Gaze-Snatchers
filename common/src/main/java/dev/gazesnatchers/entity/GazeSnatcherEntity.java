@@ -151,6 +151,22 @@ public class GazeSnatcherEntity extends Monster {
     }
 
     @Override
+    protected void customServerAiStep(ServerLevel level) {
+        super.customServerAiStep(level);
+        if (isDayPassive()) {
+            this.setTarget(null);
+        }
+    }
+
+    @Override
+    public boolean doHurtTarget(net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.Entity target) {
+        if (isDayPassive()) {
+            return false;
+        }
+        return super.doHurtTarget(level, target);
+    }
+
+    @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
         if (source.getEntity() instanceof Player) {
             notePlayerInteraction();

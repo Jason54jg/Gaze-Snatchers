@@ -4,6 +4,7 @@ import dev.gazesnatchers.config.GazeSnatchersConfig;
 import dev.gazesnatchers.registry.ModCreativeTabs;
 import dev.gazesnatchers.registry.ModEntities;
 import dev.gazesnatchers.registry.ModItems;
+import dev.gazesnatchers.registry.ModMobEffects;
 import dev.gazesnatchers.registry.ModSounds;
 import dev.gazesnatchers.sleep.SleepWatcher;
 import net.minecraft.resources.Identifier;
@@ -18,8 +19,10 @@ public final class GazeSnatchers {
         LOGGER.info("Initialisation de Gaze Snatchers…");
         GazeSnatchersConfig.load();
         ModSounds.register();
+        ModMobEffects.register();
         ModEntities.register();
         ModItems.register();
+        ModItems.registerSpawnEggs();
         ModCreativeTabs.register();
 
         SleepWatcher.registerPlatformHooks();

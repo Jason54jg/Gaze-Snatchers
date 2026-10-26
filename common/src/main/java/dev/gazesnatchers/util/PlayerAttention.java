@@ -1,5 +1,6 @@
 package dev.gazesnatchers.util;
 
+import dev.gazesnatchers.registry.ModMobEffects;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
@@ -28,5 +29,10 @@ public final class PlayerAttention {
             }
         }
         return false;
+    }
+
+    /** Amulette ou effet Clarté du regard actif. */
+    public static boolean hasGazeProtection(ServerPlayer player) {
+        return hasGazeWardAmulet(player) || player.hasEffect(ModMobEffects.GAZE_CLARITY);
     }
 }

@@ -19,6 +19,9 @@ public final class ModCreativeTabs {
                         .displayItems((params, output) -> {
                             output.accept(ModItems.GAZE_SHARD);
                             output.accept(ModItems.GAZE_WARD_AMULET);
+                            output.accept(ModItems.GAZE_DRAUGHT);
+                            output.accept(ModItems.GAZE_SNATCHER_SPAWN_EGG);
+                            output.accept(ModItems.BABY_GAZE_SNATCHER_SPAWN_EGG);
                         })
                         .build());
     }

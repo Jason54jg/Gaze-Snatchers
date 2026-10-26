@@ -7,7 +7,7 @@
 - **Hiérarchie** : `Root` → `Head`, `Body`, `LeftArm`, `RightArm`, `LeftLeg`, `RightLeg`
 - **Proportions** : tête 12×12×12, corps 6×20×4, bras 3×26×3, jambes 3×22×3
 - **Texture** : `assets/gazesnatchers/textures/entity/gaze_snatcher.png` (128×128)
-- **Yeux émissifs** : calque `#e` ou `_e` avec blanc pur `#FFFFFF` + bloom en shader/resource pack optionnel
+- **Yeux émissifs** : texture `gaze_snatcher_emissive.png` (placeholder fourni) — brancher en rendu émissif / resource pack pour le bloom
 
 ### Bébé (`baby_gaze_snatcher`)
 - **Hiérarchie** : `Root` → `Head`, `Body`, `Left_Foreleg`, `Right_Foreleg`, `Left_Hindleg`, `Right_Hindleg`

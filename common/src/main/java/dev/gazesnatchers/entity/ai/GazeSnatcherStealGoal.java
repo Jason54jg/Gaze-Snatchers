@@ -46,7 +46,7 @@ public class GazeSnatcherStealGoal extends Goal {
         }
 
         float progressRate = 1.0F;
-        if (PlayerAttention.hasGazeWardAmulet(sleeper)) {
+        if (PlayerAttention.hasGazeProtection(sleeper)) {
             progressRate *= GazeSnatchersConfig.amuletStealReduction();
         }
 

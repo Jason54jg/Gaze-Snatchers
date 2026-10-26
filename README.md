@@ -47,7 +47,7 @@ Fichier `config/gazesnatchers.json` (généré au premier lancement) :
 - **Bébés** : toujours hostiles, rapides, drop 1–3 Éclats de Regard.
 - **Amulette de Veille** : craft 4 éclats + amethyst shard (réduit le vol).
 
-Test rapide en jeu : `/summon gazesnatchers:gaze_snatcher` (les œufs d'apparition pourront être ajoutés via le format data-driven 1.21.11).
+Test rapide : œufs d'apparition dans l'onglet créatif, ou `/summon gazesnatchers:gaze_snatcher`.
 
 ## Multi-joueur
 
