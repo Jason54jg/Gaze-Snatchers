@@ -72,6 +72,11 @@ Test rapide : œufs d'apparition dans l'onglet créatif, ou `/summon gazesnatche
 
 Toute la logique (spawn, vol, division) est **serveur-side** ; compatible multiplayer dédié.
 
+## Wiki
+
+Site joueur (GitHub Pages, déployé depuis `wiki/` via Actions) :
+https://jason54jg.github.io/Gaze-Snatchers/
+
 ## Crédits & licence
 
 MIT — voir `LICENSE`. Textures/sons placeholders : remplacez avant publication Modrinth (voir `docs/ART_AND_AUDIO.md`).

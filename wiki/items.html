@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Objets — Gaze Snatchers</title>
+  <meta name="description" content="Éclat de Regard, Amulette de Veille, Infusion de Clarté et recettes.">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Gaze Snatchers</a>
+      <nav>
+        <ul class="nav">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="entities.html">Entités</a></li>
+          <li><a href="items.html" aria-current="page">Objets</a></li>
+          <li><a href="gameplay.html">Gameplay</a></li>
+          <li><a href="install.html">Installation</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top: 2.75rem;">
+    <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 0.5rem;">Objets</h1>
+    <p class="muted">Drops, crafts et protections contre le regard.</p>
+
+    <h2>Éclat de Regard</h2>
+    <p>
+      ID : <code>gazesnatchers:gaze_shard</code><br>
+      Ressource de base, droppée par les entités du mod.
+      Sert aux crafts d’amulette et d’infusion.
+    </p>
+
+    <h2>Amulette de Veille</h2>
+    <p>
+      ID : <code>gazesnatchers:gaze_ward_amulet</code><br>
+      Gardée dans l’inventaire, elle <strong>ralentit le vol</strong>
+      (réduction configurable, défaut <code>amuletStealReduction</code> = 0.55).
+    </p>
+
+    <div class="craft">
+      <div class="craft-grid" aria-hidden="true">
+        <div class="slot"></div>
+        <div class="slot filled">Éclat</div>
+        <div class="slot"></div>
+        <div class="slot filled">Éclat</div>
+        <div class="slot filled">Améth.</div>
+        <div class="slot filled">Éclat</div>
+        <div class="slot"></div>
+        <div class="slot filled">Éclat</div>
+        <div class="slot"></div>
+      </div>
+      <div class="craft-meta">
+        <h3>Amulette de Veille</h3>
+        <p>4 × Éclat de Regard + 1 × Éclat d’améthyste (forme croix).</p>
+        <span class="tag">crafting_shaped</span>
+      </div>
+    </div>
+
+    <h2>Infusion de Clarté</h2>
+    <p>
+      ID : <code>gazesnatchers:gaze_draught</code><br>
+      Potion craftable qui applique l’effet
+      <strong>Clarté du regard</strong> (<code>gaze_clarity</code>).
+    </p>
+
+    <div class="craft">
+      <div class="craft-meta" style="grid-column: 1 / -1;">
+        <h3>Infusion de Clarté</h3>
+        <p>
+          Craft sans forme : 2 × Éclat de Regard + 1 × Fiole vide + 1 × Chorus fruit.
+        </p>
+        <span class="tag">crafting_shapeless</span>
+      </div>
+    </div>
+
+    <h2>Objets volés</h2>
+    <p>
+      Un item dérobé peut porter le libellé
+      <code>%s (volé)</code>. Un bébé aléatoire peut le transporter
+      après la mort de l’adulte.
+    </p>
+
+    <hr>
+    <p class="muted">Voir aussi : <a href="entities.html">Entités</a> · <a href="gameplay.html">Gameplay</a></p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Gaze Snatchers — licence MIT</span>
+      <a href="https://github.com/Jason54jg/Gaze-Snatchers">Dépôt GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>

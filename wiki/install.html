@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Installation — Gaze Snatchers</title>
+  <meta name="description" content="Installer Gaze Snatchers sur Fabric ou NeoForge (1.21.11 et 26.x).">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="index.html">Gaze Snatchers</a>
+      <nav>
+        <ul class="nav">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="entities.html">Entités</a></li>
+          <li><a href="items.html">Objets</a></li>
+          <li><a href="gameplay.html">Gameplay</a></li>
+          <li><a href="install.html" aria-current="page">Installation</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top: 2.75rem;">
+    <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 0.5rem;">Installation</h1>
+    <p class="muted">Dual-loader : choisissez Fabric <em>ou</em> NeoForge selon votre instance.</p>
+
+    <h2>Versions supportées</h2>
+    <ul>
+      <li><strong>1.21.11</strong> (profil par défaut, JDK 21)</li>
+      <li><strong>26.1 / 26.1.1 / 26.1.2 / 26.2 / 26.3</strong> (JDK 25)</li>
+    </ul>
+
+    <h2>Joueur (JAR prêt)</h2>
+    <ol>
+      <li>Installez <strong>Fabric</strong> ou <strong>NeoForge</strong> pour votre version de Minecraft.</li>
+      <li>Téléchargez le JAR correspondant depuis les
+        <a href="https://github.com/Jason54jg/Gaze-Snatchers/releases">releases GitHub</a>
+        (dossier <code>release/&lt;version&gt;/</code> dans le dépôt).</li>
+      <li>Placez le JAR dans le dossier <code>mods/</code>.</li>
+      <li>Lancez le jeu. La config apparaît dans <code>config/gazesnatchers.json</code>.</li>
+    </ol>
+
+    <h2>Build depuis les sources</h2>
+    <p>Profil courant (1.21.11)&nbsp;:</p>
+    <pre><code>./gradlew build</code></pre>
+    <p>Toute la matrice (Windows, PowerShell)&nbsp;:</p>
+    <pre><code>$env:JAVA_HOME = "C:\Program Files\Java\jdk-25.0.3"
+$env:BUILD_26 = "true"
+.\scripts\build-all-versions.ps1</code></pre>
+    <p>JARs générés sous <code>release/&lt;minecraft_version&gt;/</code>.</p>
+
+    <h2>Dev client</h2>
+    <pre><code>./gradlew :fabric:runClient
+./gradlew :neoforge:runClient</code></pre>
+
+    <h2>Dépendances</h2>
+    <p>
+      Le mod s’appuie notamment sur <strong>Architectury</strong> et
+      <strong>GeckoLib</strong> (versions gérées par le build Gradle).
+      Utilisez les JARs publiés pour éviter les conflits de versions.
+    </p>
+
+    <hr>
+    <p class="muted">
+      Docs techniques :
+      <a href="https://github.com/Jason54jg/Gaze-Snatchers/blob/main/docs/MINECRAFT-26.md">MINECRAFT-26.md</a>
+      ·
+      <a href="https://github.com/Jason54jg/Gaze-Snatchers">README</a>
+    </p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>Gaze Snatchers — licence MIT</span>
+      <a href="https://github.com/Jason54jg/Gaze-Snatchers">Dépôt GitHub</a>
+    </div>
+  </footer>
+</body>
+</html>
