@@ -57,6 +57,7 @@ public class GazeSnatcherStealGoal extends Goal {
         }
 
         if (tryStealItem(sleeper, level.getRandom())) {
+            snatcher.playStealAnimation();
             snatcher.playSound(ModSounds.GAZE_SNATCHER_STEAL, 1.2F, 0.85F + level.random.nextFloat() * 0.2F);
             if (GazeSnatchersConfig.despawnAfterSteal()) {
                 snatcher.discard();

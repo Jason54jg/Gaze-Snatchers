@@ -20,16 +20,16 @@ public final class ModEntities {
         GAZE_SNATCHER = register(
                 "gaze_snatcher",
                 EntityType.Builder.of(GazeSnatcherEntity::new, MobCategory.MONSTER)
-                        .sized(0.7F, 2.75F)
-                        .eyeHeight(2.45F)
+                        .sized(0.7F, 3.1F)
+                        .eyeHeight(2.85F)
                         .clientTrackingRange(10)
                         .updateInterval(3));
 
         BABY_GAZE_SNATCHER = register(
                 "baby_gaze_snatcher",
                 EntityType.Builder.of(BabyGazeSnatcherEntity::new, MobCategory.MONSTER)
-                        .sized(0.55F, 0.55F)
-                        .eyeHeight(0.45F)
+                        .sized(0.7F, 0.65F)
+                        .eyeHeight(0.5F)
                         .clientTrackingRange(8)
                         .updateInterval(2));
     }

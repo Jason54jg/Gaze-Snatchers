@@ -11,8 +11,8 @@ import net.minecraft.resources.Identifier;
 public class BabyGazeSnatcherRenderer extends MobRenderer<BabyGazeSnatcherEntity, LivingEntityRenderState, BabyGazeSnatcherModel> {
     private static final Identifier TEXTURE = Identifier.fromNamespaceAndPath(
             "gazesnatchers", "textures/entity/baby_gaze_snatcher.png");
-    /** Modèle pieds@24 (~1.5 blocs) → hitbox ~0.55 */
-    private static final float MODEL_SCALE = 0.38F;
+    /** Modèle pieds@24 (~1.5 blocs) → hitbox ~0.65 */
+    private static final float MODEL_SCALE = 0.42F;
 
     public BabyGazeSnatcherRenderer(EntityRendererProvider.Context context) {
         super(context, new BabyGazeSnatcherModel(context.bakeLayer(BabyGazeSnatcherModel.LAYER)), 0.25F);

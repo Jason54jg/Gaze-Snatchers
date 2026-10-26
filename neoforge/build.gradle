@@ -53,6 +53,7 @@ dependencies {
         common(project(":common")) { transitive false }
         shadowBundle(project(path: ":common", configuration: "runtimeElements")) { transitive = false }
     } else {
+        modImplementation "software.bernie.geckolib:geckolib-neoforge-1.21.11:${rootProject.geckolib_version}"
         common(project(path: ":common", configuration: "namedElements")) { transitive false }
         shadowBundle project(path: ":common", configuration: "transformProductionNeoForge")
     }

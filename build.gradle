@@ -48,6 +48,11 @@ allprojects {
         maven { url "https://maven.fabricmc.net/" }
         maven { url "https://maven.neoforged.net/releases/" }
         maven { url "https://maven.architectury.dev/" }
+        maven {
+            name = "GeckoLib"
+            url = "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/"
+            content { includeGroup("software.bernie.geckolib") }
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {

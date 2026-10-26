@@ -35,3 +35,5 @@ cli/target/
 *.hprof
 hs_err_pid*
 replay_pid*
+tools/
+release/

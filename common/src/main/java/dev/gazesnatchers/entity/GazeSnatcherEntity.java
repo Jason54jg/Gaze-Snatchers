@@ -30,16 +30,29 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animatable.manager.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Adulte : passif le jour, fixe et vole la nuit pendant le sommeil.
+ * Rendu / anim : GeckoLib (geo + animations Blockbench).
  */
-public class GazeSnatcherEntity extends Monster {
+public class GazeSnatcherEntity extends Monster implements GeoEntity {
     private static final EntityDataAccessor<String> SLEEPER_ID =
             SynchedEntityData.defineId(GazeSnatcherEntity.class, EntityDataSerializers.STRING);
+
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation STEAL = RawAnimation.begin().thenPlay("gaze_steal");
+    private static final RawAnimation ANGRY = RawAnimation.begin().thenPlay("angry");
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
 
     private float stealProgress;
     private int interactionCooldown;
@@ -49,6 +62,25 @@ public class GazeSnatcherEntity extends Monster {
     public GazeSnatcherEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
         this.xpReward = 12;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>("main", 5, state -> {
+            if (state.isMoving()) {
+                return state.setAndContinue(WALK);
+            }
+            return state.setAndContinue(IDLE);
+        }).triggerableAnim("gaze_steal", STEAL).triggerableAnim("angry", ANGRY));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
+    }
+
+    public void playStealAnimation() {
+        this.triggerAnim("main", "gaze_steal");
     }
 
     public static AttributeSupplier.Builder createAttributes() {

@@ -15,16 +15,15 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 
 /**
- * Petit rampant — pieds à y=24, puis scale renderer (~0.4) pour hitbox 0.55.
- * Atlas 64×64 :
- * Head 8×8×8 @ (0,0) ; Body 6×5×8 @ (0,20) ; Legs 2×4×2 @ (32,0)/(32,8)
+ * Reproduction du bébé Blockbench (screenshot) :
+ * grosse tête cube, corps trapu pierre, 4 pattes écartées, yeux violets.
+ * Hiérarchie identique : Head, Body, Left_Foreleg, Right_Foreleg, Left_Hindleg, Right_Hindleg.
  */
 public class BabyGazeSnatcherModel extends EntityModel<LivingEntityRenderState> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(
             GazeSnatchers.id("baby_gaze_snatcher"), "main");
 
     private final ModelPart head;
-    private final ModelPart body;
     private final ModelPart leftForeleg;
     private final ModelPart rightForeleg;
     private final ModelPart leftHindleg;
@@ -33,11 +32,10 @@ public class BabyGazeSnatcherModel extends EntityModel<LivingEntityRenderState> 
     public BabyGazeSnatcherModel(ModelPart root) {
         super(root);
         this.head = root.getChild("Head");
-        this.body = root.getChild("Body");
-        this.leftForeleg = root.getChild("LeftForeleg");
-        this.rightForeleg = root.getChild("RightForeleg");
-        this.leftHindleg = root.getChild("LeftHindleg");
-        this.rightHindleg = root.getChild("RightHindleg");
+        this.leftForeleg = root.getChild("Left_Foreleg");
+        this.rightForeleg = root.getChild("Right_Foreleg");
+        this.leftHindleg = root.getChild("Left_Hindleg");
+        this.rightHindleg = root.getChild("Right_Hindleg");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -45,36 +43,36 @@ public class BabyGazeSnatcherModel extends EntityModel<LivingEntityRenderState> 
         PartDefinition root = mesh.getRoot();
         CubeDeformation none = new CubeDeformation(0.0F);
 
-        // Corps bas (dessus des pattes ~ y=20), tête devant
-        root.addOrReplaceChild(
-                "Body",
-                CubeListBuilder.create().texOffs(0, 20).addBox(-3.0F, -5.0F, -4.0F, 6.0F, 5.0F, 8.0F, none),
-                PartPose.offset(0.0F, 20.0F, 0.0F));
-
+        // Tête dominante (presque aussi large que le corps)
         root.addOrReplaceChild(
                 "Head",
-                CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -8.0F, 8.0F, 8.0F, 8.0F, none),
-                PartPose.offset(0.0F, 18.0F, -2.0F));
+                CubeListBuilder.create().texOffs(0, 0).addBox(-6.0F, -10.0F, -10.0F, 12.0F, 12.0F, 12.0F, none),
+                PartPose.offset(0.0F, 12.0F, -2.0F));
 
+        // Corps bas / pierre
         root.addOrReplaceChild(
-                "LeftForeleg",
-                CubeListBuilder.create().texOffs(32, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 4.0F, 2.0F, none),
-                PartPose.offset(2.5F, 20.0F, -2.5F));
+                "Body",
+                CubeListBuilder.create().texOffs(0, 24).addBox(-5.0F, -5.0F, -6.0F, 10.0F, 7.0F, 12.0F, none),
+                PartPose.offset(0.0F, 17.0F, 2.0F));
 
+        // Pattes courtes, écartées (pose « frog ») — pieds à y=24
+        float spread = 0.35F;
         root.addOrReplaceChild(
-                "RightForeleg",
-                CubeListBuilder.create().texOffs(32, 0).mirror().addBox(-1.0F, 0.0F, -1.0F, 2.0F, 4.0F, 2.0F, none).mirror(false),
-                PartPose.offset(-2.5F, 20.0F, -2.5F));
-
+                "Left_Foreleg",
+                CubeListBuilder.create().texOffs(48, 0).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, none),
+                PartPose.offsetAndRotation(4.5F, 17.0F, -3.5F, 0.0F, 0.0F, -spread));
         root.addOrReplaceChild(
-                "LeftHindleg",
-                CubeListBuilder.create().texOffs(32, 8).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 4.0F, 2.0F, none),
-                PartPose.offset(2.5F, 20.0F, 2.5F));
-
+                "Right_Foreleg",
+                CubeListBuilder.create().texOffs(48, 0).mirror().addBox(-2.0F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, none).mirror(false),
+                PartPose.offsetAndRotation(-4.5F, 17.0F, -3.5F, 0.0F, 0.0F, spread));
         root.addOrReplaceChild(
-                "RightHindleg",
-                CubeListBuilder.create().texOffs(32, 8).mirror().addBox(-1.0F, 0.0F, -1.0F, 2.0F, 4.0F, 2.0F, none).mirror(false),
-                PartPose.offset(-2.5F, 20.0F, 2.5F));
+                "Left_Hindleg",
+                CubeListBuilder.create().texOffs(48, 12).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, none),
+                PartPose.offsetAndRotation(4.5F, 17.0F, 5.0F, 0.0F, 0.0F, -spread));
+        root.addOrReplaceChild(
+                "Right_Hindleg",
+                CubeListBuilder.create().texOffs(48, 12).mirror().addBox(-2.0F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, none).mirror(false),
+                PartPose.offsetAndRotation(-4.5F, 17.0F, 5.0F, 0.0F, 0.0F, spread));
 
         return LayerDefinition.create(mesh, 64, 64);
     }
@@ -83,11 +81,11 @@ public class BabyGazeSnatcherModel extends EntityModel<LivingEntityRenderState> 
     public void setupAnim(LivingEntityRenderState state) {
         float walk = state.walkAnimationPos;
         float speed = state.walkAnimationSpeed;
-        float fl = Mth.cos(walk * 0.6662F) * 1.4F * speed;
-        float fr = Mth.cos(walk * 0.6662F + (float) Math.PI) * 1.4F * speed;
+        float fl = Mth.cos(walk * 0.6662F) * 1.2F * speed;
+        float fr = Mth.cos(walk * 0.6662F + (float) Math.PI) * 1.2F * speed;
 
         head.yRot = state.yRot * ((float) Math.PI / 180F);
-        head.xRot = state.xRot * ((float) Math.PI / 180F) * 0.5F;
+        head.xRot = state.xRot * ((float) Math.PI / 180F) * 0.35F;
 
         leftForeleg.xRot = fl;
         rightForeleg.xRot = fr;
