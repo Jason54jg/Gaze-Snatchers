@@ -7,7 +7,6 @@ import dev.gazesnatchers.registry.ModSounds;
 import dev.gazesnatchers.util.SunSensitiveEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -22,11 +21,15 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * Bébé : toujours agressif, rapide, craint le soleil.
+ * Bébé : toujours agressif, rapide, craint le soleil. Peut transporter un item volé par l'adulte.
  */
 public class BabyGazeSnatcherEntity extends Monster {
+    @Nullable
+    private ItemStack inheritedStolenItem = ItemStack.EMPTY;
+
     public BabyGazeSnatcherEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
         this.xpReward = 5;
@@ -34,6 +37,16 @@ public class BabyGazeSnatcherEntity extends Monster {
 
     public static AttributeSupplier.Builder createAttributes() {
         return ModEntities.babyGazeSnatcherAttributes();
+    }
+
+    public void inheritStolenItem(ItemStack stack) {
+        if (!stack.isEmpty()) {
+            this.inheritedStolenItem = stack.copy();
+        }
+    }
+
+    public boolean carriesStolenLoot() {
+        return inheritedStolenItem != null && !inheritedStolenItem.isEmpty();
     }
 
     @Override
@@ -65,10 +78,24 @@ public class BabyGazeSnatcherEntity extends Monster {
         int shards = 1 + random.nextInt(3);
         this.spawnAtLocation(level, new ItemStack(ModItems.GAZE_SHARD, shards));
 
-        if (random.nextDouble() < GazeSnatchersConfig.rareStolenItemDropChance()) {
-            // Placeholder pour un futur item « marqué volé » — drop rare d'un éclat bonus.
-            this.spawnAtLocation(level, new ItemStack(ModItems.GAZE_SHARD, 1));
+        if (carriesStolenLoot() && random.nextDouble() < GazeSnatchersConfig.rareStolenItemDropChance()) {
+            this.spawnAtLocation(level, inheritedStolenItem.copy());
+            inheritedStolenItem = ItemStack.EMPTY;
         }
+    }
+
+    @Override
+    protected void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        if (carriesStolenLoot()) {
+            output.store("InheritedStolen", ItemStack.CODEC, inheritedStolenItem);
+        }
+    }
+
+    @Override
+    protected void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput input) {
+        super.readAdditionalSaveData(input);
+        inheritedStolenItem = input.read("InheritedStolen", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override

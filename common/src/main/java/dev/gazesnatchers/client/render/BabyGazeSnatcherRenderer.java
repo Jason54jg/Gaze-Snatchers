@@ -13,6 +13,7 @@ public class BabyGazeSnatcherRenderer extends MobRenderer<BabyGazeSnatcherEntity
 
     public BabyGazeSnatcherRenderer(EntityRendererProvider.Context context) {
         super(context, new BabyGazeSnatcherModel(context.bakeLayer(BabyGazeSnatcherModel.LAYER)), 0.28F);
+        this.addLayer(new BabyGazeSnatcherEyesLayer(this));
     }
 
     @Override

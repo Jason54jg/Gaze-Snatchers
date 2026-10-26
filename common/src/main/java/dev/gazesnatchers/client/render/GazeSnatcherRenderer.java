@@ -13,6 +13,7 @@ public class GazeSnatcherRenderer extends MobRenderer<GazeSnatcherEntity, Living
 
     public GazeSnatcherRenderer(EntityRendererProvider.Context context) {
         super(context, new GazeSnatcherModel(context.bakeLayer(GazeSnatcherModel.LAYER)), 0.45F);
+        this.addLayer(new GazeSnatcherEyesLayer(this));
     }
 
     @Override

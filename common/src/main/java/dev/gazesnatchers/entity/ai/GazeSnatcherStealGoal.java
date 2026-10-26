@@ -5,6 +5,7 @@ import dev.gazesnatchers.util.WorldTime;
 import dev.gazesnatchers.entity.GazeSnatcherEntity;
 import dev.gazesnatchers.registry.ModSounds;
 import dev.gazesnatchers.util.PlayerAttention;
+import dev.gazesnatchers.util.StolenItemHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
@@ -75,7 +76,7 @@ public class GazeSnatcherStealGoal extends Goal {
             if (stack.isEmpty()) {
                 continue;
             }
-            ItemStack stolen = stack.split(1);
+            ItemStack stolen = StolenItemHelper.markStolen(stack.split(1));
             snatcher.markStolenItem(stolen);
             return true;
         }

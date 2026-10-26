@@ -29,4 +29,14 @@ Les PNG actuels sont des placeholders procéduraux. Remplacez-les par vos textur
 | `gaze_snatcher_death` | Cri long → éclatement en petits cris | ~1.5 s | Enchaîner avec spawn bébés |
 | `baby_*` | Pleurs/gémissements aigus déformés | loops courts | Pitch 1.2–1.5 |
 
-Les fichiers `.ogg` dans `assets/gazesnatchers/sounds/` sont des **placeholders** (ton sine) : remplacez-les sans changer les noms.
+Les fichiers `.ogg` dans `assets/gazesnatchers/sounds/` sont des **placeholders** (mix bruit/sine léger) : remplacez-les sans changer les noms.
+
+## Rendu yeux (in-game)
+
+- Couche `EyesLayer` + `RenderTypes.eyes()` sur les renderers adulte/bébé
+- Textures : `gaze_snatcher_emissive.png`, `baby_gaze_snatcher_emissive.png` (blanc sur transparent)
+
+## Items volés
+
+- Nom custom : `item.gazesnatchers.stolen_item_label`
+- Un bébé aléatoire hérite du loot à la mort de l'adulte ; drop rare (`rareStolenItemDropChance` dans la config)

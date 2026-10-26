@@ -198,10 +198,15 @@ public class GazeSnatcherEntity extends Monster {
         int min = dev.gazesnatchers.config.GazeSnatchersConfig.minBabies();
         int max = dev.gazesnatchers.config.GazeSnatchersConfig.maxBabies();
         int count = min + serverLevel.random.nextInt(Math.max(1, max - min + 1));
+        ItemStack stolenLoot = lastStolenItem != null ? lastStolenItem : ItemStack.EMPTY;
+        int lootCarrier = !stolenLoot.isEmpty() ? serverLevel.random.nextInt(count) : -1;
         for (int i = 0; i < count; i++) {
             BabyGazeSnatcherEntity baby = ModEntities.BABY_GAZE_SNATCHER.create(serverLevel, EntitySpawnReason.MOB_SUMMONED);
             if (baby == null) {
                 continue;
+            }
+            if (i == lootCarrier) {
+                baby.inheritStolenItem(stolenLoot);
             }
             double angle = (Math.PI * 2.0D / count) * i;
             baby.setPos(
@@ -224,9 +229,7 @@ public class GazeSnatcherEntity extends Monster {
             output.putString("Sleeper", sleeper);
         }
         if (lastStolenItem != null && !lastStolenItem.isEmpty()) {
-            output.putString(
-                    "LastStolenId",
-                    net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(lastStolenItem.getItem()).toString());
+            output.store("LastStolen", ItemStack.CODEC, lastStolenItem);
         }
     }
 
@@ -235,13 +238,7 @@ public class GazeSnatcherEntity extends Monster {
         super.readAdditionalSaveData(input);
         stealProgress = input.getFloatOr("StealProgress", 0.0F);
         input.getString("Sleeper").ifPresent(s -> this.entityData.set(SLEEPER_ID, s));
-        input.getString("LastStolenId").ifPresent(stolenId -> {
-            var itemId = net.minecraft.resources.Identifier.parse(stolenId);
-            var item = net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(itemId);
-            if (item != null) {
-                lastStolenItem = new ItemStack(item, 1);
-            }
-        });
+        lastStolenItem = input.read("LastStolen", ItemStack.CODEC).orElse(ItemStack.EMPTY);
     }
 
     @Override

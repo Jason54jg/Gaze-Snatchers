@@ -6,6 +6,7 @@
   "item.gazesnatchers.gaze_ward_amulet": "Gaze Ward Amulet",
   "item.gazesnatchers.gaze_draught": "Gaze Draught",
   "effect.gazesnatchers.gaze_clarity": "Gaze Clarity",
+  "item.gazesnatchers.stolen_item_label": "%s (stolen)",
   "item.gazesnatchers.gaze_snatcher_spawn_egg": "Gaze Snatcher Spawn Egg",
   "item.gazesnatchers.baby_gaze_snatcher_spawn_egg": "Baby Gaze Snatcher Spawn Egg",
   "subtitles.gazesnatchers.gaze_snatcher_ambient": "Gaze Snatcher murmurs",
