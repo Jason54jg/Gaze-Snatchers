@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
 
 public final class ModEntities {
     public static EntityType<GazeSnatcherEntity> GAZE_SNATCHER;
@@ -19,8 +20,8 @@ public final class ModEntities {
         GAZE_SNATCHER = register(
                 "gaze_snatcher",
                 EntityType.Builder.of(GazeSnatcherEntity::new, MobCategory.MONSTER)
-                        .sized(0.75F, 2.85F)
-                        .eyeHeight(2.65F)
+                        .sized(0.7F, 2.75F)
+                        .eyeHeight(2.45F)
                         .clientTrackingRange(10)
                         .updateInterval(3));
 
@@ -40,15 +41,16 @@ public final class ModEntities {
     }
 
     public static AttributeSupplier.Builder gazeSnatcherAttributes() {
-        return AttributeSupplier.builder()
+        return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 28.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.22D)
                 .add(Attributes.FOLLOW_RANGE, 24.0D)
+                .add(Attributes.ATTACK_DAMAGE, 6.0D)
                 .add(Attributes.ARMOR, 2.0D);
     }
 
     public static AttributeSupplier.Builder babyGazeSnatcherAttributes() {
-        return AttributeSupplier.builder()
+        return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 10.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.34D)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D)

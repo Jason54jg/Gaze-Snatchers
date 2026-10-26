@@ -20,6 +20,6 @@ side = "BOTH"
 [[dependencies.gazesnatchers]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.11,)"
+versionRange = "${minecraft_range}"
 ordering = "NONE"
 side = "BOTH"

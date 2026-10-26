@@ -211,8 +211,9 @@ public class GazeSnatcherEntity extends Monster {
             double angle = (Math.PI * 2.0D / count) * i;
             baby.setPos(
                     this.getX() + Math.cos(angle) * 0.8D,
-                    this.getY(),
+                    this.getY() + 0.1D,
                     this.getZ() + Math.sin(angle) * 0.8D);
+            baby.setOnGround(true);
             baby.setYRot(this.getYRot());
             baby.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(this.blockPosition()), EntitySpawnReason.MOB_SUMMONED, null);
             serverLevel.addFreshEntity(baby);

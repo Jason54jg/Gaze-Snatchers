@@ -32,3 +32,4 @@ cli/target/
 # Misc
 *.log
 *.bak
+*.hprof

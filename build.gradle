@@ -1,22 +1,21 @@
-buildscript {
-    if (rootProject.hasProperty("kotlin_version")) {
-        dependencies {
-            classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.kotlin_version}"
-        }
-    }
-}
-
 plugins {
     id "architectury-plugin" version "${architectury_plugin_version}"
     id "dev.architectury.loom" version "${architectury_loom_version}" apply false
+    id "dev.architectury.loom-no-remap" version "${architectury_loom_version}" apply false
 }
 
 architectury {
     minecraft = rootProject.minecraft_version
 }
 
+def gazeUnobfuscated = findProperty("unobfuscated") == "true"
+
 subprojects {
-    apply plugin: "dev.architectury.loom"
+    if (gazeUnobfuscated) {
+        apply plugin: "dev.architectury.loom-no-remap"
+    } else {
+        apply plugin: "dev.architectury.loom"
+    }
 
     loom {
         silentMojangMappingsLicense()
@@ -27,7 +26,9 @@ subprojects {
 
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
-        mappings loom.officialMojangMappings()
+        if (!gazeUnobfuscated) {
+            mappings loom.officialMojangMappings()
+        }
     }
 }
 
@@ -40,29 +41,30 @@ allprojects {
         archivesName = rootProject.archives_base_name
     }
 
-    version = rootProject.mod_version
+    version = "${rootProject.mod_version}-${rootProject.minecraft_version}+${project.name}"
     group = rootProject.maven_group
 
     repositories {
         maven { url "https://maven.fabricmc.net/" }
         maven { url "https://maven.neoforged.net/releases/" }
+        maven { url "https://maven.architectury.dev/" }
     }
 
     tasks.withType(JavaCompile).configureEach {
         options.encoding = "UTF-8"
-        options.release = 21
+        def release = findProperty("unobfuscated") == "true" ? 25 : 21
+        options.release = release
     }
 
     java {
-        withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    if (rootProject.hasProperty("mod_language") && rootProject.mod_language == "kotlin") {
-        apply plugin: "org.jetbrains.kotlin.jvm"
-        kotlin {
-            jvmToolchain(21)
+        if (findProperty("unobfuscated") == "true") {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(25)
+            }
+        } else {
+            sourceCompatibility = JavaVersion.VERSION_21
+            targetCompatibility = JavaVersion.VERSION_21
         }
+        withSourcesJar()
     }
 }

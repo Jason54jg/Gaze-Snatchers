@@ -1,5 +1,6 @@
 package dev.gazesnatchers.sleep;
 
+import dev.gazesnatchers.GazeSnatchers;
 import dev.gazesnatchers.config.GazeSnatchersConfig;
 import dev.gazesnatchers.entity.GazeSnatcherEntity;
 import dev.gazesnatchers.registry.ModEntities;
@@ -28,6 +29,14 @@ public final class SleepWatcher {
     }
 
     public static void onPlayerStartSleeping(ServerPlayer player, BlockPos bedPos) {
+        try {
+            trySpawn(player);
+        } catch (RuntimeException ex) {
+            GazeSnatchers.LOGGER.error("Échec du spawn Gaze Snatcher au sommeil", ex);
+        }
+    }
+
+    private static void trySpawn(ServerPlayer player) {
         ServerLevel level = player.level();
         if (WorldTime.isDay(level)) {
             return;
@@ -49,7 +58,10 @@ public final class SleepWatcher {
         snatcher.setYRot(player.getYRot() + 180.0F);
         snatcher.linkSleeper(player);
         snatcher.finalizeSpawn(level, level.getCurrentDifficultyAt(feet), EntitySpawnReason.MOB_SUMMONED, null);
-        level.addFreshEntity(snatcher);
+        if (!level.addFreshEntity(snatcher)) {
+            GazeSnatchers.LOGGER.warn("addFreshEntity a refusé le Gaze Snatcher");
+            return;
+        }
         snatcher.playSound(ModSounds.GAZE_SNATCHER_SPAWN, 1.25F, 0.7F + random.nextFloat() * 0.25F);
     }
 

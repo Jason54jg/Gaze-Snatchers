@@ -1,0 +1,25 @@
+modLoader = "javafml"
+loaderVersion = "[4,)"
+license = "MIT"
+
+[[mods]]
+modId = "gazesnatchers"
+version = "${version}"
+displayName = "Gaze Snatchers"
+description = '''Un mob inquiétant qui apparaît quand vous dormez et peut voler un item de votre inventaire.'''
+authors = "Gaze Snatchers Team"
+logoFile = "assets/gazesnatchers/textures/icon.png"
+
+[[dependencies.gazesnatchers]]
+modId = "neoforge"
+type = "required"
+versionRange = "[26.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.gazesnatchers]]
+modId = "minecraft"
+type = "required"
+versionRange = "${minecraft_range}"
+ordering = "NONE"
+side = "BOTH"

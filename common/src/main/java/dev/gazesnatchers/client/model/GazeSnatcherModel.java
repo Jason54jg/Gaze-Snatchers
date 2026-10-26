@@ -12,66 +12,90 @@ import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 
+/**
+ * Convention humanoid : pieds à y=24 (LivingEntityRenderer translate -1.501).
+ * Atlas 64×64, UV non chevauchés.
+ */
 public class GazeSnatcherModel extends EntityModel<LivingEntityRenderState> {
     public static final ModelLayerLocation LAYER = new ModelLayerLocation(
             GazeSnatchers.id("gaze_snatcher"), "main");
 
     private final ModelPart head;
     private final ModelPart body;
+    private final ModelPart leftArm;
+    private final ModelPart rightArm;
+    private final ModelPart leftLeg;
+    private final ModelPart rightLeg;
 
     public GazeSnatcherModel(ModelPart root) {
         super(root);
         this.head = root.getChild("Head");
         this.body = root.getChild("Body");
+        this.leftArm = root.getChild("LeftArm");
+        this.rightArm = root.getChild("RightArm");
+        this.leftLeg = root.getChild("LeftLeg");
+        this.rightLeg = root.getChild("RightLeg");
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
+        CubeDeformation none = new CubeDeformation(0.0F);
 
+        // Cou ~ y=8 ; tête au-dessus (Y-), pieds à y=24
         root.addOrReplaceChild(
                 "Head",
-                CubeListBuilder.create().texOffs(0, 0).addBox(-6.0F, -12.0F, -6.0F, 12.0F, 12.0F, 12.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(0.0F, -22.0F, 0.0F));
+                CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -10.0F, -5.0F, 10.0F, 10.0F, 10.0F, none),
+                PartPose.offset(0.0F, -8.0F, 0.0F));
 
         root.addOrReplaceChild(
                 "Body",
-                CubeListBuilder.create().texOffs(32, 0).addBox(-3.0F, 0.0F, -2.0F, 6.0F, 20.0F, 4.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(0.0F, -22.0F, 0.0F));
+                CubeListBuilder.create().texOffs(0, 24).addBox(-2.5F, -16.0F, -1.5F, 5.0F, 16.0F, 3.0F, none),
+                PartPose.offset(0.0F, 8.0F, 0.0F));
 
         root.addOrReplaceChild(
                 "LeftArm",
-                CubeListBuilder.create().texOffs(56, 0).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 26.0F, 3.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(5.0F, -20.0F, 0.0F));
+                CubeListBuilder.create().texOffs(40, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 20.0F, 2.0F, none),
+                PartPose.offset(3.5F, -6.0F, 0.0F));
 
         root.addOrReplaceChild(
                 "RightArm",
-                CubeListBuilder.create().texOffs(56, 0).mirror().addBox(-1.5F, 0.0F, -1.5F, 3.0F, 26.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false),
-                PartPose.offset(-5.0F, -20.0F, 0.0F));
+                CubeListBuilder.create().texOffs(40, 0).mirror().addBox(-1.0F, 0.0F, -1.0F, 2.0F, 20.0F, 2.0F, none).mirror(false),
+                PartPose.offset(-3.5F, -6.0F, 0.0F));
 
         root.addOrReplaceChild(
                 "LeftLeg",
-                CubeListBuilder.create().texOffs(0, 32).addBox(-1.5F, 0.0F, -1.5F, 3.0F, 22.0F, 3.0F, new CubeDeformation(0.0F)),
-                PartPose.offset(2.0F, -2.0F, 0.0F));
+                CubeListBuilder.create().texOffs(40, 24).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 16.0F, 2.0F, none),
+                PartPose.offset(1.5F, 8.0F, 0.0F));
 
         root.addOrReplaceChild(
                 "RightLeg",
-                CubeListBuilder.create().texOffs(0, 32).mirror().addBox(-1.5F, 0.0F, -1.5F, 3.0F, 22.0F, 3.0F, new CubeDeformation(0.0F)).mirror(false),
-                PartPose.offset(-2.0F, -2.0F, 0.0F));
+                CubeListBuilder.create().texOffs(40, 24).mirror().addBox(-1.0F, 0.0F, -1.0F, 2.0F, 16.0F, 2.0F, none).mirror(false),
+                PartPose.offset(-1.5F, 8.0F, 0.0F));
 
-        return LayerDefinition.create(mesh, 128, 128);
+        return LayerDefinition.create(mesh, 64, 64);
     }
 
     @Override
     public void setupAnim(LivingEntityRenderState state) {
-        float yRot = state.yRot * ((float) Math.PI / 180F);
-        float xRot = state.xRot * ((float) Math.PI / 180F);
-        head.yRot = yRot;
-        head.xRot = xRot;
-        // Posture légèrement penchée (silhouette Blockbench).
-        body.xRot = 0.18F + xRot * 0.15F;
-        body.yRot = yRot * 0.25F;
+        float walk = state.walkAnimationPos;
+        float walkSpeed = state.walkAnimationSpeed;
+        float limb = Mth.cos(walk * 0.6662F) * 1.2F * walkSpeed;
+
+        head.yRot = state.yRot * ((float) Math.PI / 180F);
+        head.xRot = state.xRot * ((float) Math.PI / 180F);
+
+        body.xRot = 0.06F;
+
+        leftArm.xRot = -limb * 0.55F;
+        rightArm.xRot = limb * 0.55F;
+        leftArm.zRot = -0.05F;
+        rightArm.zRot = 0.05F;
+
+        leftLeg.xRot = limb;
+        rightLeg.xRot = -limb;
     }
 
     public Identifier texture() {

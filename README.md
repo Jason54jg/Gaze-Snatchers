@@ -1,29 +1,38 @@
 # Gaze Snatchers
 
-Mod Minecraft **dual-loader** (Fabric + NeoForge) pour **Minecraft 1.21.11** (NeoForge **21.11.x**, compatible avec la ligne **26.3.x**).
+Mod Minecraft **dual-loader** (Fabric + NeoForge) pour **Minecraft 1.21.11** et **26.1 / 26.1.1 / 26.1.2 / 26.2 / 26.3**.
 
 Un mob inquiétant qui apparaît lorsque vous vous couchez la nuit, vous fixe, et peut voler un item si vous ne prêtez pas attention. En le tuant, il se divise en 2 à 4 bébés agressifs.
 
 ## Structure du projet
 
 ```text
-common/     Logique partagée (entités, IA, items, config, assets)
+common/     Logique partagée (java + javaMojmap26 pour MC 26.x)
 fabric/     Entrée Fabric + hooks sommeil + client
 neoforge/   Entrée NeoForge + hooks sommeil + client
-docs/       Spécifications art/audio
+gradle/versions/  Profils par version Minecraft
+docs/       Spécifications art/audio + MINECRAFT-26.md
 ```
 
 ## Build
+
+Profil courant (défaut **1.21.11**, JDK 21) :
 
 ```bash
 ./gradlew build
 ```
 
-JARs :
-- `fabric/build/libs/gazesnatchers-fabric-1.0.0.jar`
-- `neoforge/build/libs/gazesnatchers-neoforge-1.0.0.jar`
+Toutes les versions (1.21.11 + matrice 26.x avec JDK 25) :
 
-Client de dev :
+```powershell
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-25.0.3"   # requis pour 26.x
+$env:BUILD_26 = "true"
+.\scripts\build-all-versions.ps1
+```
+
+JARs sous `release/<minecraft_version>/`. Détails 26.x : [docs/MINECRAFT-26.md](docs/MINECRAFT-26.md).
+
+Client de dev (profil courant) :
 ```bash
 ./gradlew :fabric:runClient
 ./gradlew :neoforge:runClient

@@ -18,9 +18,10 @@ public class GazeSnatchersFabric implements ModInitializer {
         SleepWatcher.bindPlatformHooks(GazeSnatchersFabric::registerSleepEvents);
         GazeSnatchers.bindPlatformCommands(() -> CommandRegistrationCallback.EVENT.register(
                 (dispatcher, registryAccess, environment) -> GazeSnatchersCommands.register(dispatcher)));
+        // Entities must exist before attribute registration (otherwise LivingEntity ctor NPE).
+        GazeSnatchers.init();
         FabricDefaultAttributeRegistry.register(ModEntities.GAZE_SNATCHER, GazeSnatcherEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(ModEntities.BABY_GAZE_SNATCHER, BabyGazeSnatcherEntity.createAttributes());
-        GazeSnatchers.init();
     }
 
     private static void registerSleepEvents() {

@@ -1,10 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
-  "pattern": [" S ", "SAS", " S "],
+  "pattern": [
+    " S ",
+    "SAS",
+    " S "
+  ],
   "key": {
-    "S": { "item": "gazesnatchers:gaze_shard" },
-    "A": { "item": "minecraft:amethyst_shard" }
+    "S": "gazesnatchers:gaze_shard",
+    "A": "minecraft:amethyst_shard"
   },
   "result": {
     "id": "gazesnatchers:gaze_ward_amulet",

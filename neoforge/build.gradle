@@ -1,14 +1,34 @@
 plugins {
-    id "com.gradleup.shadow" version "9.0.2"
+    id "com.gradleup.shadow" version "9.5.1"
 }
+
+def unobfuscated = rootProject.findProperty("unobfuscated") == "true"
 
 base {
     archivesName = "${rootProject.archives_base_name}-neoforge"
 }
 
+if (unobfuscated) {
+    sourceSets.main.java.setSrcDirs(["src/main/javaMojmap26"])
+    sourceSets.main.resources.setSrcDirs([
+        "src/unobfuscated/resources",
+        "src/main/resources"
+    ])
+}
+
 architectury {
     platformSetupLoomIde()
     neoForge()
+}
+
+loom {
+    enableModProvidedJavadoc.set(false)
+    mods {
+        main {
+            sourceSet sourceSets.main
+            sourceSet project(":common").sourceSets.main
+        }
+    }
 }
 
 configurations {
@@ -29,28 +49,44 @@ configurations {
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowBundle project(path: ":common", configuration: "transformProductionNeoForge")
+    if (unobfuscated) {
+        common(project(":common")) { transitive false }
+        shadowBundle(project(path: ":common", configuration: "runtimeElements")) { transitive = false }
+    } else {
+        common(project(path: ":common", configuration: "namedElements")) { transitive false }
+        shadowBundle project(path: ":common", configuration: "transformProductionNeoForge")
+    }
 }
 
 processResources {
-    inputs.property "version", rootProject.version
-
+    if (unobfuscated) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+    inputs.property "version", project.version
+    inputs.property "neoforge_minecraft_range", rootProject.findProperty("neoforge_minecraft_range") ?: "[1.21.11,)"
     filesMatching("META-INF/neoforge.mods.toml") {
-        expand version: rootProject.version
+        expand "version": project.version, "minecraft_range": neoforge_minecraft_range
     }
 }
 
 shadowJar {
     exclude "architectury.common.json"
     configurations = [project.configurations.shadowBundle]
-    archiveClassifier = "dev-shadow"
+    archiveClassifier = unobfuscated ? "" : "dev-shadow"
 }
 
-remapJar {
-    input.set shadowJar.archiveFile
-    dependsOn shadowJar
-    archiveClassifier = null
+if (unobfuscated) {
+    tasks.register("remapJar") {
+        dependsOn(tasks.named("shadowJar"))
+        group = "build"
+        description = "Production jar (unobfuscated; alias for shadowJar)"
+    }
+} else {
+    remapJar {
+        input.set shadowJar.archiveFile
+        dependsOn shadowJar
+        archiveClassifier = null
+    }
 }
 
 sourcesJar {
@@ -62,17 +98,5 @@ sourcesJar {
 components.java {
     withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
         skip()
-    }
-}
-
-publishing {
-    publications {
-        mavenNeoForge(MavenPublication) {
-            artifactId = rootProject.archives_base_name + "-" + project.name
-            from components.java
-        }
-    }
-
-    repositories {
     }
 }

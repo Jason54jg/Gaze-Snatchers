@@ -7,8 +7,18 @@ pluginManagement {
     }
 }
 
+def skipNeoForge = false
+def gradlePropsFile = file("gradle.properties")
+if (gradlePropsFile.exists()) {
+    def props = new Properties()
+    gradlePropsFile.withInputStream { props.load(it) }
+    skipNeoForge = props.getProperty("skip_neoforge", "false") == "true"
+}
+
 include("common")
 include("fabric")
-include("neoforge")
+if (!skipNeoForge) {
+    include("neoforge")
+}
 
 rootProject.name = "gazesnatchers"
