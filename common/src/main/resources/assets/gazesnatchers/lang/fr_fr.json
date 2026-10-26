@@ -1,0 +1,19 @@
+{
+  "itemGroup.gazesnatchers.main": "Gaze Snatchers",
+  "entity.gazesnatchers.gaze_snatcher": "Voleur de Regard",
+  "entity.gazesnatchers.baby_gaze_snatcher": "Bébé Voleur de Regard",
+  "item.gazesnatchers.gaze_shard": "Éclat de Regard",
+  "item.gazesnatchers.gaze_ward_amulet": "Amulette de Veille",
+  "item.gazesnatchers.gaze_draught": "Infusion de Clarté",
+  "effect.gazesnatchers.gaze_clarity": "Clarté du regard",
+  "item.gazesnatchers.stolen_item_label": "%s (volé)",
+  "item.gazesnatchers.gaze_snatcher_spawn_egg": "Œuf d'apparition — Voleur de Regard",
+  "item.gazesnatchers.baby_gaze_snatcher_spawn_egg": "Œuf d'apparition — Bébé Voleur de Regard",
+  "subtitles.gazesnatchers.gaze_snatcher_ambient": "Murmures du Voleur de Regard",
+  "subtitles.gazesnatchers.gaze_snatcher_spawn": "Apparition du Voleur de Regard",
+  "subtitles.gazesnatchers.gaze_snatcher_steal": "Vol du Voleur de Regard",
+  "subtitles.gazesnatchers.gaze_snatcher_death": "Mort du Voleur de Regard",
+  "subtitles.gazesnatchers.baby_gaze_snatcher_ambient": "Gémissements du bébé",
+  "subtitles.gazesnatchers.baby_gaze_snatcher_hurt": "Bébé blessé",
+  "subtitles.gazesnatchers.baby_gaze_snatcher_death": "Mort du bébé"
+}

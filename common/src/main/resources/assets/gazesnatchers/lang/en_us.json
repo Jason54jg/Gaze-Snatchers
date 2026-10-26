@@ -1,0 +1,19 @@
+{
+  "itemGroup.gazesnatchers.main": "Gaze Snatchers",
+  "entity.gazesnatchers.gaze_snatcher": "Gaze Snatcher",
+  "entity.gazesnatchers.baby_gaze_snatcher": "Baby Gaze Snatcher",
+  "item.gazesnatchers.gaze_shard": "Gaze Shard",
+  "item.gazesnatchers.gaze_ward_amulet": "Gaze Ward Amulet",
+  "item.gazesnatchers.gaze_draught": "Gaze Draught",
+  "effect.gazesnatchers.gaze_clarity": "Gaze Clarity",
+  "item.gazesnatchers.stolen_item_label": "%s (stolen)",
+  "item.gazesnatchers.gaze_snatcher_spawn_egg": "Gaze Snatcher Spawn Egg",
+  "item.gazesnatchers.baby_gaze_snatcher_spawn_egg": "Baby Gaze Snatcher Spawn Egg",
+  "subtitles.gazesnatchers.gaze_snatcher_ambient": "Gaze Snatcher murmurs",
+  "subtitles.gazesnatchers.gaze_snatcher_spawn": "Gaze Snatcher appears",
+  "subtitles.gazesnatchers.gaze_snatcher_steal": "Gaze Snatcher steals",
+  "subtitles.gazesnatchers.gaze_snatcher_death": "Gaze Snatcher dies",
+  "subtitles.gazesnatchers.baby_gaze_snatcher_ambient": "Baby whimpers",
+  "subtitles.gazesnatchers.baby_gaze_snatcher_hurt": "Baby hurt",
+  "subtitles.gazesnatchers.baby_gaze_snatcher_death": "Baby dies"
+}
