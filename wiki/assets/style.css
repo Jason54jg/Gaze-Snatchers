@@ -9,7 +9,7 @@
   --ok: #7a9a6a;
   --font-display: "Segoe UI", "Helvetica Neue", sans-serif;
   --font-body: "Segoe UI", "Helvetica Neue", sans-serif;
-  --max: 720px;
+  --max: 820px;
 }
 
 *,
@@ -292,12 +292,124 @@ pre code {
   padding: 0;
 }
 
+/* —— Models / galleries —— */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.85rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.gallery figure {
+  margin: 0;
+  background: #080706;
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.gallery img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #0a0908;
+}
+
+.gallery figcaption {
+  padding: 0.45rem 0.65rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+
+.entity-head {
+  display: grid;
+  grid-template-columns: minmax(140px, 220px) 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  margin: 1rem 0 1.5rem;
+}
+
+.entity-portrait {
+  margin: 0;
+  background: #080706;
+  border: 1px solid var(--line);
+}
+
+.entity-portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+
+.skin-sheet {
+  max-width: 280px;
+  border: 1px solid var(--line);
+  background: #080706;
+  image-rendering: pixelated;
+}
+
+.item-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.item-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  min-width: min(100%, 220px);
+}
+
+.item-card img,
+.item-icon {
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+  background: #0a0908;
+  border: 1px solid var(--line);
+}
+
+.item-card strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.item-card span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.hero-visual {
+  margin: 0 0 1.75rem;
+  border: 1px solid var(--line);
+  background: #080706;
+  overflow: hidden;
+}
+
+.hero-visual img {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: contain;
+  object-position: center;
+}
+
 /* —— Craft —— */
 .craft {
   display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem 1.5rem;
-  align-items: start;
+  grid-template-columns: auto auto 1fr;
+  gap: 0.85rem 1.1rem;
+  align-items: center;
   margin: 1rem 0 1.75rem;
   padding: 1.15rem;
   background: var(--bg-elevated);
@@ -306,9 +418,36 @@ pre code {
 
 .craft-grid {
   display: grid;
-  grid-template-columns: repeat(3, 2.4rem);
-  grid-template-rows: repeat(3, 2.4rem);
+  grid-template-columns: repeat(3, 2.75rem);
+  grid-template-rows: repeat(3, 2.75rem);
   gap: 3px;
+  background: #1a1612;
+  padding: 4px;
+  border: 2px solid #3a342c;
+}
+
+.craft-arrow {
+  color: var(--muted);
+  font-size: 1.4rem;
+  user-select: none;
+}
+
+.craft-result {
+  width: 3.25rem;
+  height: 3.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0908;
+  border: 2px solid #5a5040;
+}
+
+.craft-result img,
+.slot img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  display: block;
 }
 
 .slot {
@@ -325,8 +464,48 @@ pre code {
 }
 
 .slot.filled {
-  color: var(--accent);
   border-color: #5a5040;
+}
+
+.craft-shapeless {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.craft-shapeless .plus,
+.craft-shapeless .eq {
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.ing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 3.5rem;
+}
+
+.ing img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+  background: #0a0908;
+  border: 1px solid #3a342c;
+  padding: 4px;
+  box-sizing: content-box;
+}
+
+.ing span {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.craft-meta {
+  grid-column: 1 / -1;
 }
 
 .craft-meta h3 {
@@ -346,6 +525,20 @@ pre code {
   color: var(--muted);
   border: 1px solid var(--line);
   padding: 0.15rem 0.45rem;
+}
+
+@media (max-width: 640px) {
+  .entity-head {
+    grid-template-columns: 1fr;
+  }
+
+  .craft {
+    grid-template-columns: auto auto;
+  }
+
+  .craft-meta {
+    grid-column: 1 / -1;
+  }
 }
 
 /* —— Footer —— */

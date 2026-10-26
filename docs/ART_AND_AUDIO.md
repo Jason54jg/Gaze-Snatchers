@@ -1,42 +1,42 @@
-# Gaze Snatchers — art, modèles Blockbench & audio
+# Gaze Snatchers — art, Blockbench models & audio
 
-## Modèles Blockbench (référence fournie)
+## Blockbench models (reference)
 
-### Adulte (`gaze_snatcher`)
-- **Format** : Java Entity / Minecraft 1.21+
-- **Hiérarchie** : `Root` → `Head`, `Body`, `LeftArm`, `RightArm`, `LeftLeg`, `RightLeg`
-- **Proportions** : tête 12×12×12, corps 6×20×4, bras 3×26×3, jambes 3×22×3
-- **Texture** : `assets/gazesnatchers/textures/entity/gaze_snatcher.png` (128×128)
-- **Yeux émissifs** : texture `gaze_snatcher_emissive.png` (placeholder fourni) — brancher en rendu émissif / resource pack pour le bloom
+### Adult (`gaze_snatcher`)
+- **Format**: Java Entity / Minecraft 1.21+
+- **Hierarchy**: `Root` → `Head`, `Body`, `LeftArm`, `RightArm`, `LeftLeg`, `RightLeg`
+- **Proportions**: head 12×12×12, body 6×20×4, arms 3×26×3, legs 3×22×3
+- **Texture**: `assets/gazesnatchers/textures/entity/gaze_snatcher.png` (128×128)
+- **Emissive eyes**: `gaze_snatcher_emissive.png` (placeholder) — wire up as emissive / resource pack for bloom
 
-### Bébé (`baby_gaze_snatcher`)
-- **Hiérarchie** : `Root` → `Head`, `Body`, `Left_Foreleg`, `Right_Foreleg`, `Left_Hindleg`, `Right_Hindleg`
-- **Texture** : `textures/entity/baby_gaze_snatcher.png` (64×64)
+### Baby (`baby_gaze_snatcher`)
+- **Hierarchy**: `Root` → `Head`, `Body`, `Left_Foreleg`, `Right_Foreleg`, `Left_Hindleg`, `Right_Hindleg`
+- **Texture**: `textures/entity/baby_gaze_snatcher.png` (64×64)
 
-Les classes `GazeSnatcherModel` et `BabyGazeSnatcherModel` reproduisent cette hiérarchie pour le rendu in-game. Pour remplacer par un export Blockbench `.java`, remplacez les `LayerDefinition` par le fichier exporté et gardez le même `ModelLayerLocation`.
+`GazeSnatcherModel` and `BabyGazeSnatcherModel` mirror this hierarchy for in-game rendering. To swap in a Blockbench `.java` export, replace the `LayerDefinition`s with the exported file and keep the same `ModelLayerLocation`.
 
-## Textures placeholder
+## Placeholder textures
 
-Les PNG actuels sont des placeholders procéduraux. Remplacez-les par vos textures finales (gris-noir veiné, yeux blancs émissifs).
+Current PNGs are procedural placeholders. Replace them with final art (veined grey-black, white emissive eyes).
 
-## Spécifications audio (à remplacer)
+## Audio specs (to replace)
 
-| ID | Description cible | Durée | Notes |
-|----|-------------------|-------|-------|
-| `gaze_snatcher_ambient` | Souffle lent + murmures + craquements | 3–6 s loop | Audible à 8 blocs, spatialisé |
-| `gaze_snatcher_spawn` | Pop humide + inspiration | ~1 s | One-shot |
-| `gaze_snatcher_steal` | Rire étouffé / aspiration | ~0.6 s | One-shot |
-| `gaze_snatcher_death` | Cri long → éclatement en petits cris | ~1.5 s | Enchaîner avec spawn bébés |
-| `baby_*` | Pleurs/gémissements aigus déformés | loops courts | Pitch 1.2–1.5 |
+| ID | Target description | Duration | Notes |
+|----|--------------------|----------|-------|
+| `gaze_snatcher_ambient` | Slow breath + murmurs + creaks | 3–6 s loop | Audible at 8 blocks, spatial |
+| `gaze_snatcher_spawn` | Wet pop + inhale | ~1 s | One-shot |
+| `gaze_snatcher_steal` | Muffled laugh / suction | ~0.6 s | One-shot |
+| `gaze_snatcher_death` | Long cry → burst into small cries | ~1.5 s | Chain with baby spawn |
+| `baby_*` | Distorted high whimpers | short loops | Pitch 1.2–1.5 |
 
-Les fichiers `.ogg` dans `assets/gazesnatchers/sounds/` sont des **placeholders** (mix bruit/sine léger) : remplacez-les sans changer les noms.
+The `.ogg` files under `assets/gazesnatchers/sounds/` are **placeholders** (light noise/sine mix): replace them without renaming.
 
-## Rendu yeux (in-game)
+## Eye rendering (in-game)
 
-- Couche `EyesLayer` + `RenderTypes.eyes()` sur les renderers adulte/bébé
-- Textures : `gaze_snatcher_emissive.png`, `baby_gaze_snatcher_emissive.png` (blanc sur transparent)
+- `EyesLayer` + `RenderTypes.eyes()` on adult/baby renderers
+- Textures: `gaze_snatcher_emissive.png`, `baby_gaze_snatcher_emissive.png` (white on transparent)
 
-## Items volés
+## Stolen items
 
-- Nom custom : `item.gazesnatchers.stolen_item_label`
-- Un bébé aléatoire hérite du loot à la mort de l'adulte ; drop rare (`rareStolenItemDropChance` dans la config)
+- Custom name: `item.gazesnatchers.stolen_item_label`
+- A random baby inherits loot on adult death; rare drop (`rareStolenItemDropChance` in config)

@@ -6,7 +6,7 @@ license = "MIT"
 modId = "gazesnatchers"
 version = "${version}"
 displayName = "Gaze Snatchers"
-description = '''Un mob inquiétant qui apparaît quand vous dormez et peut voler un item de votre inventaire.'''
+description = '''A creepy mob that appears when you sleep and may steal an item from your inventory.'''
 authors = "Gaze Snatchers Team"
 logoFile = "assets/gazesnatchers/textures/icon.png"
 

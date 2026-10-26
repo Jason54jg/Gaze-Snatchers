@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gameplay — Gaze Snatchers</title>
-  <meta name="description" content="Boucle de jeu, configuration et commandes debug du mod Gaze Snatchers.">
+  <meta name="description" content="Gameplay loop, configuration, and debug commands for Gaze Snatchers.">
+  <link rel="icon" href="assets/icon.png" type="image/png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -13,11 +14,11 @@
       <a class="brand" href="index.html">Gaze Snatchers</a>
       <nav>
         <ul class="nav">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="entities.html">Entités</a></li>
-          <li><a href="items.html">Objets</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="entities.html">Entities</a></li>
+          <li><a href="items.html">Items</a></li>
           <li><a href="gameplay.html" aria-current="page">Gameplay</a></li>
-          <li><a href="install.html">Installation</a></li>
+          <li><a href="install.html">Install</a></li>
         </ul>
       </nav>
     </div>
@@ -25,21 +26,21 @@
 
   <main class="wrap" style="padding-top: 2.75rem;">
     <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 0.5rem;">Gameplay</h1>
-    <p class="muted">Comment survit-on à une nuit avec un Voleur de Regard&nbsp;?</p>
+    <p class="muted">How do you survive a night with a Gaze Snatcher?</p>
 
-    <h2>Boucle typique</h2>
+    <h2>Typical loop</h2>
     <ol>
-      <li>Vous vous couchez la nuit.</li>
-      <li>Avec une certaine chance, un Voleur de Regard apparaît devant vous.</li>
-      <li>Il vous fixe. Regardez-le / rompez le contact pour éviter le vol.</li>
-      <li>Trop lent&nbsp;? Un objet disparaît de l’inventaire.</li>
-      <li>Le combattre fait éclater 2–4 bébés hostiles.</li>
-      <li>Les éclats lootés servent à craft amulette et infusion.</li>
+      <li>You go to sleep at night.</li>
+      <li>With some chance, a Gaze Snatcher appears in front of you.</li>
+      <li>It stares. Look at it / break attention to avoid the steal.</li>
+      <li>Too slow? An item vanishes from your inventory.</li>
+      <li>Fighting it spawns 2–4 hostile babies.</li>
+      <li>Looted shards craft the amulet and draught.</li>
     </ol>
 
     <h2>Configuration</h2>
     <p>
-      Fichier généré au premier lancement&nbsp;:
+      File created on first launch:
       <code>config/gazesnatchers.json</code>
     </p>
 
@@ -47,8 +48,8 @@
       <table>
         <thead>
           <tr>
-            <th>Clé</th>
-            <th>Défaut</th>
+            <th>Key</th>
+            <th>Default</th>
             <th>Description</th>
           </tr>
         </thead>
@@ -56,63 +57,63 @@
           <tr>
             <td><code>spawnChance</code></td>
             <td>0.72</td>
-            <td>Chance d’apparition au coucher</td>
+            <td>Chance to spawn when sleeping</td>
           </tr>
           <tr>
             <td><code>ticksBeforeSteal</code></td>
             <td>160</td>
-            <td>Ticks sans attention avant vol (~8&nbsp;s)</td>
+            <td>Ticks without attention before steal (~8s)</td>
           </tr>
           <tr>
             <td><code>minBabiesOnSplit</code> / <code>maxBabiesOnSplit</code></td>
             <td>2 / 4</td>
-            <td>Nombre de bébés à la mort de l’adulte</td>
+            <td>Babies on adult death</td>
           </tr>
           <tr>
             <td><code>amuletStealReduction</code></td>
             <td>0.55</td>
-            <td>Ralentit le vol si amulette en inventaire</td>
+            <td>Slows steal if amulet is in inventory</td>
           </tr>
           <tr>
             <td><code>despawnAfterSteal</code></td>
             <td>true</td>
-            <td>Disparition après un vol réussi</td>
+            <td>Despawn after a successful steal</td>
           </tr>
           <tr>
             <td><code>alwaysDropStolenFromCarrier</code></td>
             <td>false</td>
-            <td>Le bébé porteur droppe toujours l’item volé</td>
+            <td>Carrier baby always drops the stolen item</td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <h2>Commandes</h2>
-    <p>Niveau OP / permission 2&nbsp;:</p>
+    <h2>Commands</h2>
+    <p>OP / permission level 2:</p>
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Commande</th>
-            <th>Effet</th>
+            <th>Command</th>
+            <th>Effect</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>/gazesnatchers spawn adult</code></td>
-            <td>Spawn un adulte devant vous</td>
+            <td>Spawn an adult in front of you</td>
           </tr>
           <tr>
             <td><code>/gazesnatchers spawn baby</code></td>
-            <td>Spawn un bébé</td>
+            <td>Spawn a baby</td>
           </tr>
           <tr>
             <td><code>/gazesnatchers trigger_sleep</code></td>
-            <td>Simule l’apparition au coucher (sans lit)</td>
+            <td>Simulate sleep spawn (no bed)</td>
           </tr>
           <tr>
             <td><code>/gazesnatchers reload_config</code></td>
-            <td>Recharge <code>config/gazesnatchers.json</code></td>
+            <td>Reload <code>config/gazesnatchers.json</code></td>
           </tr>
         </tbody>
       </table>
@@ -120,18 +121,18 @@
 
     <h2>Multiplayer</h2>
     <p>
-      Spawn, vol et division sont entièrement <strong>côté serveur</strong>.
-      Compatible monde dédié Fabric ou NeoForge.
+      Spawn, steal, and split are fully <strong>server-side</strong>.
+      Works on dedicated Fabric or NeoForge servers.
     </p>
 
     <hr>
-    <p class="muted">Voir aussi : <a href="install.html">Installation</a> · <a href="entities.html">Entités</a></p>
+    <p class="muted">See also: <a href="install.html">Install</a> · <a href="entities.html">Entities</a></p>
   </main>
 
   <footer class="site-footer">
     <div class="wrap">
-      <span>Gaze Snatchers — licence MIT</span>
-      <a href="https://github.com/Jason54jg/Gaze-Snatchers">Dépôt GitHub</a>
+      <span>Gaze Snatchers — MIT license</span>
+      <span><a href="https://modrinth.com/project/gaze-snatcher">Modrinth</a> · <a href="https://github.com/Jason54jg/Gaze-Snatchers">GitHub</a></span>
     </div>
   </footer>
 </body>

@@ -1,82 +1,94 @@
 # Gaze Snatchers
 
-Mod Minecraft **dual-loader** (Fabric + NeoForge) pour **Minecraft 1.21.11** et **26.1 / 26.1.1 / 26.1.2 / 26.2 / 26.3**.
+Dual-loader Minecraft mod (**Fabric** + **NeoForge**) for **Minecraft 1.21.11** and **26.1 / 26.1.1 / 26.1.2 / 26.2 / 26.3**.
 
-Un mob inquiétant qui apparaît lorsque vous vous couchez la nuit, vous fixe, et peut voler un item si vous ne prêtez pas attention. En le tuant, il se divise en 2 à 4 bébés agressifs.
+A creepy mob that appears when you sleep at night, stares you down, and may steal an item if you ignore it. Kill it and it splits into 2–4 aggressive babies.
 
-## Structure du projet
+## Project layout
 
 ```text
-common/     Logique partagée (java + javaMojmap26 pour MC 26.x)
-fabric/     Entrée Fabric + hooks sommeil + client
-neoforge/   Entrée NeoForge + hooks sommeil + client
-gradle/versions/  Profils par version Minecraft
-docs/       Spécifications art/audio + MINECRAFT-26.md
+common/     Shared logic (java + javaMojmap26 for MC 26.x)
+fabric/     Fabric entry + sleep hooks + client
+neoforge/   NeoForge entry + sleep hooks + client
+gradle/versions/  Per-Minecraft-version profiles
+docs/       Art/audio specs + MINECRAFT-26.md
+wiki/       Player wiki (GitHub Pages)
 ```
 
 ## Build
 
-Profil courant (défaut **1.21.11**, JDK 21) :
+Current profile (default **1.21.11**, JDK 21):
 
 ```bash
 ./gradlew build
 ```
 
-Toutes les versions (1.21.11 + matrice 26.x avec JDK 25) :
+All versions (1.21.11 + 26.x matrix with JDK 25):
 
 ```powershell
-$env:JAVA_HOME = "C:\Program Files\Java\jdk-25.0.3"   # requis pour 26.x
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-25.0.3"   # required for 26.x
 $env:BUILD_26 = "true"
 .\scripts\build-all-versions.ps1
 ```
 
-JARs sous `release/<minecraft_version>/`. Détails 26.x : [docs/MINECRAFT-26.md](docs/MINECRAFT-26.md).
+JARs land under `release/<minecraft_version>/`. 26.x details: [docs/MINECRAFT-26.md](docs/MINECRAFT-26.md).
 
-Client de dev (profil courant) :
+Dev client (current profile):
+
 ```bash
 ./gradlew :fabric:runClient
 ./gradlew :neoforge:runClient
 ```
 
-## Commandes (OP / niveau 2)
+## Commands (OP / level 2)
 
-| Commande | Description |
-|----------|-------------|
-| `/gazesnatchers spawn adult` | Spawn un Voleur de Regard devant vous |
-| `/gazesnatchers spawn baby` | Spawn un bébé |
-| `/gazesnatchers trigger_sleep` | Simule l'apparition au coucher (sans lit) |
-| `/gazesnatchers reload_config` | Recharge `config/gazesnatchers.json` |
+| Command | Description |
+|---------|-------------|
+| `/gazesnatchers spawn adult` | Spawn a Gaze Snatcher in front of you |
+| `/gazesnatchers spawn baby` | Spawn a baby |
+| `/gazesnatchers trigger_sleep` | Simulate sleep spawn (no bed) |
+| `/gazesnatchers reload_config` | Reload `config/gazesnatchers.json` |
 
 ## Configuration
 
-Fichier `config/gazesnatchers.json` (généré au premier lancement) :
+File `config/gazesnatchers.json` (created on first launch):
 
-| Clé | Défaut | Description |
-|-----|--------|-------------|
-| `spawnChance` | 0.72 | Chance d'apparition au coucher |
-| `ticksBeforeSteal` | 160 | Ticks sans attention avant vol |
-| `minBabiesOnSplit` / `maxBabiesOnSplit` | 2 / 4 | Division à la mort |
-| `amuletStealReduction` | 0.55 | Ralentit le vol si amulette en inventaire |
-| `despawnAfterSteal` | true | Disparition après vol réussi |
-| `alwaysDropStolenFromCarrier` | false | Le bébé porteur droppe toujours l'item volé |
+| Key | Default | Description |
+|-----|---------|-------------|
+| `spawnChance` | 0.72 | Chance to spawn when sleeping |
+| `ticksBeforeSteal` | 160 | Ticks without attention before steal |
+| `minBabiesOnSplit` / `maxBabiesOnSplit` | 2 / 4 | Babies on adult death |
+| `amuletStealReduction` | 0.55 | Slows steal if amulet is in inventory |
+| `despawnAfterSteal` | true | Despawn after a successful steal |
+| `alwaysDropStolenFromCarrier` | false | Carrier baby always drops the stolen item |
 
 ## Gameplay
 
-- **Adulte** : passif le jour ; la nuit, spawn devant le joueur endormi, fixe, vole un item, brûle au soleil.
-- **Bébés** : toujours hostiles, rapides, drop 1–3 Éclats de Regard.
-- **Amulette de Veille** : craft 4 éclats + amethyst shard (réduit le vol).
+- **Adult**: passive by day; at night, may spawn in front of a sleeping player, stares, steals an item, burns in sunlight.
+- **Babies**: always hostile, fast, drop 1–3 Gaze Shards.
+- **Gaze Ward Amulet**: craft 4 shards + amethyst shard (reduces steal speed).
 
-Test rapide : œufs d'apparition dans l'onglet créatif, ou `/summon gazesnatchers:gaze_snatcher`.
+Quick test: spawn eggs in the creative tab, or `/summon gazesnatchers:gaze_snatcher`.
 
-## Multi-joueur
+## Multiplayer
 
-Toute la logique (spawn, vol, division) est **serveur-side** ; compatible multiplayer dédié.
+All logic (spawn, steal, split) is **server-side**; works on dedicated servers.
+
+## Download
+
+[Modrinth](https://modrinth.com/project/gaze-snatcher) (primary).
+
+**Requires [GeckoLib](https://modrinth.com/mod/geckolib)** (and Fabric API on Fabric). Match GeckoLib to your Minecraft version.
+
+Publication copy (English summary, full description, changelog, upload checklist): [docs/MODRINTH.md](docs/MODRINTH.md).
+
+Source / issues: [GitHub](https://github.com/Jason54jg/Gaze-Snatchers).
 
 ## Wiki
 
-Site joueur (GitHub Pages, déployé depuis `wiki/` via Actions) :
+Player site (GitHub Pages, deployed from `wiki/` via Actions):
 https://jason54jg.github.io/Gaze-Snatchers/
 
-## Crédits & licence
+## Credits & license
 
-MIT — voir `LICENSE`. Textures/sons placeholders : remplacez avant publication Modrinth (voir `docs/ART_AND_AUDIO.md`).
+MIT — see `LICENSE`. Placeholder textures/sounds: replace before publishing (see `docs/ART_AND_AUDIO.md`).

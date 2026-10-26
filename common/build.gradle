@@ -8,13 +8,18 @@ if (unobfuscated) {
     sourceSets.main.java.setSrcDirs(["src/main/javaMojmap26"])
 }
 
+def geckolibGroup = rootProject.findProperty("geckolib_group") ?: "software.bernie.geckolib"
+def geckolibMc = rootProject.findProperty("geckolib_artifact_mc") ?: rootProject.minecraft_version
+def geckolibCoord = "${geckolibGroup}:geckolib-fabric-${geckolibMc}:${rootProject.geckolib_version}"
+
 dependencies {
     if (unobfuscated) {
         compileOnly "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+        compileOnly geckolibCoord
     } else {
         modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-        // APIs GeckoLib (1.21.11) — les loaders ajoutent l'impl runtime
-        modCompileOnly "software.bernie.geckolib:geckolib-fabric-1.21.11:${rootProject.geckolib_version}"
+        // APIs GeckoLib — les loaders ajoutent l'impl runtime
+        modCompileOnly geckolibCoord
     }
 }
 

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Gaze Snatchers — Wiki</title>
-  <meta name="description" content="Wiki du mod Minecraft Gaze Snatchers : un mob qui vous fixe pendant votre sommeil et peut voler vos objets.">
+  <meta name="description" content="Wiki for the Gaze Snatchers Minecraft mod: a mob that watches you sleep and may steal from your inventory.">
+  <link rel="icon" href="assets/icon.png" type="image/png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -13,11 +14,11 @@
       <a class="brand" href="index.html">Gaze Snatchers</a>
       <nav>
         <ul class="nav">
-          <li><a href="index.html" aria-current="page">Accueil</a></li>
-          <li><a href="entities.html">Entités</a></li>
-          <li><a href="items.html">Objets</a></li>
+          <li><a href="index.html" aria-current="page">Home</a></li>
+          <li><a href="entities.html">Entities</a></li>
+          <li><a href="items.html">Items</a></li>
           <li><a href="gameplay.html">Gameplay</a></li>
-          <li><a href="install.html">Installation</a></li>
+          <li><a href="install.html">Install</a></li>
         </ul>
       </nav>
     </div>
@@ -27,58 +28,101 @@
     <div class="wrap">
       <h1>Gaze Snatchers</h1>
       <p class="lead">
-        Un mob inquiétant qui apparaît lorsque vous vous couchez la nuit,
-        vous fixe… et peut voler un objet si vous ne prêtez pas attention.
+        A creepy mob that appears when you sleep at night,
+        stares you down… and may steal an item if you look away too long.
       </p>
+      <figure class="hero-visual">
+        <img src="assets/models/gaze_snatcher_ref_front.jpg" alt="Gaze Snatcher model, front view with glowing white eyes">
+      </figure>
       <div class="cta-row">
-        <a class="btn btn-primary" href="https://github.com/Jason54jg/Gaze-Snatchers">GitHub</a>
-        <a class="btn" href="gameplay.html">Comment ça marche</a>
-        <a class="btn" href="install.html">Installer</a>
+        <a class="btn btn-primary" href="https://modrinth.com/project/gaze-snatcher">Download on Modrinth</a>
+        <a class="btn" href="entities.html">See models</a>
+        <a class="btn" href="https://github.com/Jason54jg/Gaze-Snatchers">GitHub</a>
       </div>
     </div>
   </section>
 
   <main class="wrap">
-    <h2>En bref</h2>
+    <h2>At a glance</h2>
     <p>
-      <strong>Gaze Snatchers</strong> est un mod dual-loader
-      (<strong>Fabric</strong> + <strong>NeoForge</strong>) pour
-      Minecraft <strong>1.21.11</strong> et la matrice <strong>26.x</strong>.
-      Toute la logique tourne côté serveur : compatible solo et multiplayer.
+      <strong>Gaze Snatchers</strong> is a dual-loader mod
+      (<strong>Fabric</strong> + <strong>NeoForge</strong>) for
+      Minecraft <strong>1.21.11</strong> and the <strong>26.x</strong> matrix.
+      All logic runs server-side: singleplayer and multiplayer ready.
     </p>
+
+    <div class="gallery">
+      <figure>
+        <img src="assets/models/gaze_snatcher_ref_front.jpg" alt="Adult Gaze Snatcher front">
+        <figcaption>Adult — front</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/models/gaze_snatcher_ref_side.jpg" alt="Adult Gaze Snatcher side">
+        <figcaption>Adult — side</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/models/baby_gaze_snatcher_ref_blockbench.jpg" alt="Baby Gaze Snatcher in Blockbench">
+        <figcaption>Baby Gaze Snatcher</figcaption>
+      </figure>
+    </div>
 
     <div class="features">
       <div class="feature">
-        <h3>Apparition au coucher</h3>
-        <p>La nuit, en vous allongeant, un Voleur de Regard peut surgir devant vous et vous fixer sans bouger.</p>
+        <h3>Sleep spawn</h3>
+        <p>At night, lying down can summon a Gaze Snatcher that stands still and locks onto you.</p>
       </div>
       <div class="feature">
-        <h3>Vol silencieux</h3>
-        <p>Si vous ignorez son regard trop longtemps, il dérobe un objet de votre inventaire, puis peut disparaître.</p>
+        <h3>Silent theft</h3>
+        <p>Ignore its gaze long enough and it steals an inventory item, then may despawn.</p>
       </div>
       <div class="feature">
-        <h3>Division à la mort</h3>
-        <p>Tuer l’adulte le fait éclater en 2 à 4 bébés hostiles, rapides et bruyants.</p>
+        <h3>Death split</h3>
+        <p>Killing the adult bursts it into 2–4 hostile, fast babies.</p>
       </div>
       <div class="feature">
-        <h3>Défense &amp; craft</h3>
-        <p>Les Éclats de Regard permettent de fabriquer l’Amulette de Veille et l’Infusion de Clarté.</p>
+        <h3>Defense &amp; crafting</h3>
+        <p>Gaze Shards craft the Gaze Ward Amulet and Gaze Draught. See <a href="items.html">Items</a>.</p>
       </div>
     </div>
 
-    <h2>Pages du wiki</h2>
+    <h2>Key items</h2>
+    <div class="item-row">
+      <div class="item-card">
+        <img src="assets/items/gaze_shard.png" alt="">
+        <div>
+          <strong>Gaze Shard</strong>
+          <span>Drop / craft ingredient</span>
+        </div>
+      </div>
+      <div class="item-card">
+        <img src="assets/items/gaze_ward_amulet.png" alt="">
+        <div>
+          <strong>Gaze Ward Amulet</strong>
+          <span>Slows stealing</span>
+        </div>
+      </div>
+      <div class="item-card">
+        <img src="assets/items/gaze_draught.png" alt="">
+        <div>
+          <strong>Gaze Draught</strong>
+          <span>Gaze Clarity effect</span>
+        </div>
+      </div>
+    </div>
+
+    <h2>Wiki pages</h2>
     <ul>
-      <li><a href="entities.html">Entités</a> — adulte, bébé, comportement</li>
-      <li><a href="items.html">Objets</a> — crafts, drops, effets</li>
-      <li><a href="gameplay.html">Gameplay</a> — config, commandes, boucle de jeu</li>
-      <li><a href="install.html">Installation</a> — Fabric, NeoForge, versions</li>
+      <li><a href="entities.html">Entities</a> — models, adult &amp; baby behavior</li>
+      <li><a href="items.html">Items</a> — illustrated crafts &amp; drops</li>
+      <li><a href="gameplay.html">Gameplay</a> — config, commands, loop</li>
+      <li><a href="install.html">Install</a> — Fabric, NeoForge, versions</li>
     </ul>
   </main>
 
   <footer class="site-footer">
     <div class="wrap">
-      <span>Gaze Snatchers — licence MIT</span>
-      <a href="https://github.com/Jason54jg/Gaze-Snatchers">Dépôt GitHub</a>
+      <span>Gaze Snatchers — MIT license</span>
+      <span><a href="https://modrinth.com/project/gaze-snatcher">Modrinth</a> · <a href="https://github.com/Jason54jg/Gaze-Snatchers">GitHub</a></span>
     </div>
   </footer>
 </body>

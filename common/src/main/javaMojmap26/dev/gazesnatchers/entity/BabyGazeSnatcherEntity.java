@@ -21,17 +21,45 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
+import com.geckolib.animatable.GeoEntity;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animation.AnimationController;
+import com.geckolib.animation.RawAnimation;
+import com.geckolib.util.GeckoLibUtil;
 
 /**
  * Bébé : toujours agressif, rapide, craint le soleil. Peut transporter un item volé par l'adulte.
+ * Rendu / anim : GeckoLib.
  */
-public class BabyGazeSnatcherEntity extends Monster {
+public class BabyGazeSnatcherEntity extends Monster implements GeoEntity {
+    private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
+    private static final RawAnimation WALK = RawAnimation.begin().thenLoop("walk");
+    private static final RawAnimation ANGRY = RawAnimation.begin().thenPlay("angry");
+
+    private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
+
     @Nullable
     private ItemStack inheritedStolenItem = ItemStack.EMPTY;
 
     public BabyGazeSnatcherEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
         this.xpReward = 5;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>("main", 5, state -> {
+            if (state.isMoving()) {
+                return state.setAndContinue(WALK);
+            }
+            return state.setAndContinue(IDLE);
+        }).triggerableAnim("angry", ANGRY));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.geoCache;
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -78,7 +106,7 @@ public class BabyGazeSnatcherEntity extends Monster {
     @Override
     protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
         super.dropCustomDeathLoot(level, source, recentlyHit);
-        RandomSource random = level.random;
+        RandomSource random = level.getRandom();
         if (carriesStolenLoot()) {
             boolean always = GazeSnatchersConfig.alwaysDropStolenFromCarrier();
             if (always || random.nextDouble() < GazeSnatchersConfig.rareStolenItemDropChance()) {

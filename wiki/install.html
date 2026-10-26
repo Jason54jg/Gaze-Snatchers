@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Installation — Gaze Snatchers</title>
-  <meta name="description" content="Installer Gaze Snatchers sur Fabric ou NeoForge (1.21.11 et 26.x).">
+  <title>Install — Gaze Snatchers</title>
+  <meta name="description" content="Install Gaze Snatchers on Fabric or NeoForge (1.21.11 and 26.x).">
+  <link rel="icon" href="assets/icon.png" type="image/png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -13,59 +14,67 @@
       <a class="brand" href="index.html">Gaze Snatchers</a>
       <nav>
         <ul class="nav">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="entities.html">Entités</a></li>
-          <li><a href="items.html">Objets</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="entities.html">Entities</a></li>
+          <li><a href="items.html">Items</a></li>
           <li><a href="gameplay.html">Gameplay</a></li>
-          <li><a href="install.html" aria-current="page">Installation</a></li>
+          <li><a href="install.html" aria-current="page">Install</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main class="wrap" style="padding-top: 2.75rem;">
-    <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 0.5rem;">Installation</h1>
-    <p class="muted">Dual-loader : choisissez Fabric <em>ou</em> NeoForge selon votre instance.</p>
+    <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 0.5rem;">Install</h1>
+    <p class="muted">Dual-loader: pick Fabric <em>or</em> NeoForge for your instance.</p>
 
-    <h2>Versions supportées</h2>
+    <h2>Supported versions</h2>
     <ul>
-      <li><strong>1.21.11</strong> (profil par défaut, JDK 21)</li>
+      <li><strong>1.21.11</strong> (default profile, JDK 21)</li>
       <li><strong>26.1 / 26.1.1 / 26.1.2 / 26.2 / 26.3</strong> (JDK 25)</li>
     </ul>
 
-    <h2>Joueur (JAR prêt)</h2>
+    <h2>Players (ready JAR)</h2>
+    <p>
+      Download from
+      <a href="https://modrinth.com/project/gaze-snatcher"><strong>Modrinth</strong></a>
+      (page may be empty until the first release is published).
+    </p>
     <ol>
-      <li>Installez <strong>Fabric</strong> ou <strong>NeoForge</strong> pour votre version de Minecraft.</li>
-      <li>Téléchargez le JAR correspondant depuis les
-        <a href="https://github.com/Jason54jg/Gaze-Snatchers/releases">releases GitHub</a>
-        (dossier <code>release/&lt;version&gt;/</code> dans le dépôt).</li>
-      <li>Placez le JAR dans le dossier <code>mods/</code>.</li>
-      <li>Lancez le jeu. La config apparaît dans <code>config/gazesnatchers.json</code>.</li>
+      <li>Install <strong>Fabric</strong> or <strong>NeoForge</strong> for your Minecraft version.</li>
+      <li>Get the matching JAR from
+        <a href="https://modrinth.com/project/gaze-snatcher">modrinth.com/project/gaze-snatcher</a>.</li>
+      <li>Drop the JAR into <code>mods/</code>.</li>
+      <li>Launch the game. Config appears at <code>config/gazesnatchers.json</code>.</li>
     </ol>
 
-    <h2>Build depuis les sources</h2>
-    <p>Profil courant (1.21.11)&nbsp;:</p>
+    <h2>Build from source</h2>
+    <p>Current profile (1.21.11):</p>
     <pre><code>./gradlew build</code></pre>
-    <p>Toute la matrice (Windows, PowerShell)&nbsp;:</p>
+    <p>Full matrix (Windows, PowerShell):</p>
     <pre><code>$env:JAVA_HOME = "C:\Program Files\Java\jdk-25.0.3"
 $env:BUILD_26 = "true"
 .\scripts\build-all-versions.ps1</code></pre>
-    <p>JARs générés sous <code>release/&lt;minecraft_version&gt;/</code>.</p>
+    <p>JARs are written under <code>release/&lt;minecraft_version&gt;/</code>.</p>
 
     <h2>Dev client</h2>
     <pre><code>./gradlew :fabric:runClient
 ./gradlew :neoforge:runClient</code></pre>
 
-    <h2>Dépendances</h2>
-    <p>
-      Le mod s’appuie notamment sur <strong>Architectury</strong> et
-      <strong>GeckoLib</strong> (versions gérées par le build Gradle).
-      Utilisez les JARs publiés pour éviter les conflits de versions.
+    <h2>Dependencies</h2>
+    <ul>
+      <li><strong>GeckoLib</strong> — required on Fabric and NeoForge (match your Minecraft version).</li>
+      <li><strong>Fabric API</strong> — required on Fabric only.</li>
+    </ul>
+    <p class="muted">
+      Prefer published JARs from Modrinth so dependency versions stay aligned.
+      English listing / changelog copy for publishers:
+      <a href="https://github.com/Jason54jg/Gaze-Snatchers/blob/main/docs/MODRINTH.md">docs/MODRINTH.md</a>.
     </p>
 
     <hr>
     <p class="muted">
-      Docs techniques :
+      Technical docs:
       <a href="https://github.com/Jason54jg/Gaze-Snatchers/blob/main/docs/MINECRAFT-26.md">MINECRAFT-26.md</a>
       ·
       <a href="https://github.com/Jason54jg/Gaze-Snatchers">README</a>
@@ -74,8 +83,8 @@ $env:BUILD_26 = "true"
 
   <footer class="site-footer">
     <div class="wrap">
-      <span>Gaze Snatchers — licence MIT</span>
-      <a href="https://github.com/Jason54jg/Gaze-Snatchers">Dépôt GitHub</a>
+      <span>Gaze Snatchers — MIT license</span>
+      <span><a href="https://modrinth.com/project/gaze-snatcher">Modrinth</a> · <a href="https://github.com/Jason54jg/Gaze-Snatchers">GitHub</a></span>
     </div>
   </footer>
 </body>

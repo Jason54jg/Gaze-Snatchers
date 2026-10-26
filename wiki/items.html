@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Objets — Gaze Snatchers</title>
-  <meta name="description" content="Éclat de Regard, Amulette de Veille, Infusion de Clarté et recettes.">
+  <title>Items — Gaze Snatchers</title>
+  <meta name="description" content="Gaze Shard, Gaze Ward Amulet, Gaze Draught, and illustrated recipes.">
+  <link rel="icon" href="assets/icon.png" type="image/png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -13,85 +14,120 @@
       <a class="brand" href="index.html">Gaze Snatchers</a>
       <nav>
         <ul class="nav">
-          <li><a href="index.html">Accueil</a></li>
-          <li><a href="entities.html">Entités</a></li>
-          <li><a href="items.html" aria-current="page">Objets</a></li>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="entities.html">Entities</a></li>
+          <li><a href="items.html" aria-current="page">Items</a></li>
           <li><a href="gameplay.html">Gameplay</a></li>
-          <li><a href="install.html">Installation</a></li>
+          <li><a href="install.html">Install</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main class="wrap" style="padding-top: 2.75rem;">
-    <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 0.5rem;">Objets</h1>
-    <p class="muted">Drops, crafts et protections contre le regard.</p>
+    <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 0.5rem;">Items</h1>
+    <p class="muted">Drops, crafts, and protections against the gaze.</p>
 
-    <h2>Éclat de Regard</h2>
+    <h2>Gaze Shard</h2>
+    <div class="item-card" style="margin-bottom: 1.25rem;">
+      <img src="assets/items/gaze_shard.png" alt="Gaze Shard">
+      <div>
+        <strong>Gaze Shard</strong>
+        <span><code>gazesnatchers:gaze_shard</code> — base drop &amp; craft ingredient</span>
+      </div>
+    </div>
     <p>
-      ID : <code>gazesnatchers:gaze_shard</code><br>
-      Ressource de base, droppée par les entités du mod.
-      Sert aux crafts d’amulette et d’infusion.
+      Dropped by Gaze Snatchers and babies. Used to craft the amulet and draught.
     </p>
 
-    <h2>Amulette de Veille</h2>
+    <h2>Gaze Ward Amulet</h2>
+    <div class="item-card" style="margin-bottom: 1.25rem;">
+      <img src="assets/items/gaze_ward_amulet.png" alt="Gaze Ward Amulet">
+      <div>
+        <strong>Gaze Ward Amulet</strong>
+        <span><code>gazesnatchers:gaze_ward_amulet</code> — slows stealing while in inventory</span>
+      </div>
+    </div>
     <p>
-      ID : <code>gazesnatchers:gaze_ward_amulet</code><br>
-      Gardée dans l’inventaire, elle <strong>ralentit le vol</strong>
-      (réduction configurable, défaut <code>amuletStealReduction</code> = 0.55).
+      Configurable via <code>amuletStealReduction</code> (default 0.55).
     </p>
 
     <div class="craft">
-      <div class="craft-grid" aria-hidden="true">
+      <div class="craft-grid" aria-label="Crafting grid for Gaze Ward Amulet">
         <div class="slot"></div>
-        <div class="slot filled">Éclat</div>
+        <div class="slot filled"><img src="assets/items/gaze_shard.png" alt="Gaze Shard"></div>
         <div class="slot"></div>
-        <div class="slot filled">Éclat</div>
-        <div class="slot filled">Améth.</div>
-        <div class="slot filled">Éclat</div>
+        <div class="slot filled"><img src="assets/items/gaze_shard.png" alt="Gaze Shard"></div>
+        <div class="slot filled"><img src="assets/items/amethyst_shard.svg" alt="Amethyst Shard"></div>
+        <div class="slot filled"><img src="assets/items/gaze_shard.png" alt="Gaze Shard"></div>
         <div class="slot"></div>
-        <div class="slot filled">Éclat</div>
+        <div class="slot filled"><img src="assets/items/gaze_shard.png" alt="Gaze Shard"></div>
         <div class="slot"></div>
       </div>
+      <div class="craft-arrow" aria-hidden="true">→</div>
+      <div class="craft-result">
+        <img src="assets/items/gaze_ward_amulet.png" alt="Gaze Ward Amulet">
+      </div>
       <div class="craft-meta">
-        <h3>Amulette de Veille</h3>
-        <p>4 × Éclat de Regard + 1 × Éclat d’améthyste (forme croix).</p>
+        <h3>Recipe — Gaze Ward Amulet</h3>
+        <p>4 × Gaze Shard + 1 × Amethyst Shard (cross shape).</p>
         <span class="tag">crafting_shaped</span>
       </div>
     </div>
 
-    <h2>Infusion de Clarté</h2>
-    <p>
-      ID : <code>gazesnatchers:gaze_draught</code><br>
-      Potion craftable qui applique l’effet
-      <strong>Clarté du regard</strong> (<code>gaze_clarity</code>).
-    </p>
+    <h2>Gaze Draught</h2>
+    <div class="item-card" style="margin-bottom: 1.25rem;">
+      <img src="assets/items/gaze_draught.png" alt="Gaze Draught">
+      <div>
+        <strong>Gaze Draught</strong>
+        <span><code>gazesnatchers:gaze_draught</code> — applies Gaze Clarity</span>
+      </div>
+    </div>
 
     <div class="craft">
-      <div class="craft-meta" style="grid-column: 1 / -1;">
-        <h3>Infusion de Clarté</h3>
-        <p>
-          Craft sans forme : 2 × Éclat de Regard + 1 × Fiole vide + 1 × Chorus fruit.
-        </p>
+      <div class="craft-shapeless" aria-label="Shapeless recipe for Gaze Draught">
+        <div class="ing">
+          <img src="assets/items/gaze_shard.png" alt="Gaze Shard">
+          <span>×2 Shard</span>
+        </div>
+        <span class="plus">+</span>
+        <div class="ing">
+          <img src="assets/items/glass_bottle.svg" alt="Glass Bottle">
+          <span>Bottle</span>
+        </div>
+        <span class="plus">+</span>
+        <div class="ing">
+          <img src="assets/items/chorus_fruit.svg" alt="Chorus Fruit">
+          <span>Chorus</span>
+        </div>
+        <span class="eq">=</span>
+        <div class="ing">
+          <img src="assets/items/gaze_draught.png" alt="Gaze Draught">
+          <span>Draught</span>
+        </div>
+      </div>
+      <div class="craft-meta">
+        <h3>Recipe — Gaze Draught</h3>
+        <p>Shapeless: 2 × Gaze Shard + Glass Bottle + Chorus Fruit.</p>
         <span class="tag">crafting_shapeless</span>
       </div>
     </div>
 
-    <h2>Objets volés</h2>
+    <h2>Stolen items</h2>
     <p>
-      Un item dérobé peut porter le libellé
-      <code>%s (volé)</code>. Un bébé aléatoire peut le transporter
-      après la mort de l’adulte.
+      A stolen item may show the label
+      <code>%s (stolen)</code>. A random baby can carry it
+      after the adult dies.
     </p>
 
     <hr>
-    <p class="muted">Voir aussi : <a href="entities.html">Entités</a> · <a href="gameplay.html">Gameplay</a></p>
+    <p class="muted">See also: <a href="entities.html">Entities</a> · <a href="gameplay.html">Gameplay</a></p>
   </main>
 
   <footer class="site-footer">
     <div class="wrap">
-      <span>Gaze Snatchers — licence MIT</span>
-      <a href="https://github.com/Jason54jg/Gaze-Snatchers">Dépôt GitHub</a>
+      <span>Gaze Snatchers — MIT license</span>
+      <span><a href="https://modrinth.com/project/gaze-snatcher">Modrinth</a> · <a href="https://github.com/Jason54jg/Gaze-Snatchers">GitHub</a></span>
     </div>
   </footer>
 </body>

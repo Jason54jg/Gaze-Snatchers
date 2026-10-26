@@ -46,14 +46,19 @@ configurations {
     }
 }
 
+def geckolibGroup = rootProject.findProperty("geckolib_group") ?: "software.bernie.geckolib"
+def geckolibMc = rootProject.findProperty("geckolib_artifact_mc") ?: rootProject.minecraft_version
+def geckolibCoord = "${geckolibGroup}:geckolib-neoforge-${geckolibMc}:${rootProject.geckolib_version}"
+
 dependencies {
     neoForge "net.neoforged:neoforge:${rootProject.neoforge_version}"
 
     if (unobfuscated) {
+        compileOnly geckolibCoord
         common(project(":common")) { transitive false }
         shadowBundle(project(path: ":common", configuration: "runtimeElements")) { transitive = false }
     } else {
-        modImplementation "software.bernie.geckolib:geckolib-neoforge-1.21.11:${rootProject.geckolib_version}"
+        modImplementation geckolibCoord
         common(project(path: ":common", configuration: "namedElements")) { transitive false }
         shadowBundle project(path: ":common", configuration: "transformProductionNeoForge")
     }

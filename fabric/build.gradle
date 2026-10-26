@@ -39,16 +39,21 @@ configurations {
     developmentFabric.extendsFrom common
 }
 
+def geckolibGroup = rootProject.findProperty("geckolib_group") ?: "software.bernie.geckolib"
+def geckolibMc = rootProject.findProperty("geckolib_artifact_mc") ?: rootProject.minecraft_version
+def geckolibCoord = "${geckolibGroup}:geckolib-fabric-${geckolibMc}:${rootProject.geckolib_version}"
+
 dependencies {
     if (unobfuscated) {
         compileOnly "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
         compileOnly "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+        compileOnly geckolibCoord
         common(project(":common")) { transitive false }
         shadowCommon(project(path: ":common", configuration: "runtimeElements")) { transitive false }
     } else {
         modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
         modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
-        modImplementation "software.bernie.geckolib:geckolib-fabric-1.21.11:${rootProject.geckolib_version}"
+        modImplementation geckolibCoord
         common(project(path: ":common", configuration: "namedElements")) { transitive false }
         shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
     }
