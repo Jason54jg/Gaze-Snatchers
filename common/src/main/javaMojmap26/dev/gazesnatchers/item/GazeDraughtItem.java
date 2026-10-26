@@ -4,16 +4,15 @@ import dev.gazesnatchers.registry.ModMobEffects;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.level.Level;
 
 /** Boisson utilitaire — accorde {@link ModMobEffects#GAZE_CLARITY} (vision / vigilance). */
-public class GazeDraughtItem extends Item {
+public class GazeDraughtItem extends DescribedItem {
     private static final int EFFECT_TICKS = 3600;
 
     public GazeDraughtItem(Properties properties) {

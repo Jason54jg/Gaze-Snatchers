@@ -122,15 +122,23 @@ public class GazeSnatcherEntity extends Monster implements GeoEntity, OwnableEnt
                 return !GazeSnatcherEntity.this.isTamed() && super.canUse();
             }
         });
-        this.goalSelector.addGoal(2, new GazeSnatcherFollowOwnerGoal(this, 1.15D, 8.0F, 3.0F));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.15D, true) {
+        // Melee before follow (wolf-like): follow must not steal MOVE/LOOK during combat
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, true) {
             @Override
             public boolean canUse() {
                 return GazeSnatcherEntity.this.isTamed()
                         && !GazeSnatcherEntity.this.isOrderedToSit()
                         && super.canUse();
             }
+
+            @Override
+            public boolean canContinueToUse() {
+                return GazeSnatcherEntity.this.isTamed()
+                        && !GazeSnatcherEntity.this.isOrderedToSit()
+                        && super.canContinueToUse();
+            }
         });
+        this.goalSelector.addGoal(3, new GazeSnatcherFollowOwnerGoal(this, 1.15D, 8.0F, 3.0F));
         this.goalSelector.addGoal(4, new GazeSnatcherPositionGoal(this));
         this.goalSelector.addGoal(5, new GazeSnatcherStealGoal(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 12.0F));
@@ -213,17 +221,31 @@ public class GazeSnatcherEntity extends Monster implements GeoEntity, OwnableEnt
     }
 
     public boolean isOwnedBy(LivingEntity entity) {
-        return this.isTamed() && entity != null && entity.equals(this.getOwner());
+        return entity != null && entity == this.getOwner();
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        return !this.isOwnedBy(target) && super.canAttack(target);
     }
 
     public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
         if (target == null || target == this || target == owner) {
             return false;
         }
+        if (!target.isAlive()) {
+            return false;
+        }
         if (target instanceof GazeSnatcherEntity other && other.isTamed() && other.isOwnedBy(owner)) {
             return false;
         }
-        return !owner.isAlliedTo(target);
+        if (target instanceof OwnableEntity ownable) {
+            LivingEntity otherOwner = ownable.getOwner();
+            if (otherOwner != null && otherOwner == owner) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

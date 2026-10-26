@@ -1,6 +1,7 @@
 package dev.gazesnatchers.registry;
 
 import dev.gazesnatchers.GazeSnatchers;
+import dev.gazesnatchers.item.DescribedItem;
 import dev.gazesnatchers.item.GazeBindingCharmItem;
 import dev.gazesnatchers.item.GazeDraughtItem;
 import java.util.function.Function;
@@ -24,8 +25,8 @@ public final class ModItems {
     public static Item BABY_GAZE_SNATCHER_SPAWN_EGG;
 
     public static void register() {
-        GAZE_SHARD = register("gaze_shard", Item::new, new Item.Properties());
-        GAZE_WARD_AMULET = register("gaze_ward_amulet", Item::new, new Item.Properties().stacksTo(1));
+        GAZE_SHARD = register("gaze_shard", DescribedItem::new, new Item.Properties());
+        GAZE_WARD_AMULET = register("gaze_ward_amulet", DescribedItem::new, new Item.Properties().stacksTo(1));
         GAZE_DRAUGHT = register("gaze_draught", GazeDraughtItem::new, new Item.Properties());
         GAZE_BINDING_CHARM = register(
                 "gaze_binding_charm",

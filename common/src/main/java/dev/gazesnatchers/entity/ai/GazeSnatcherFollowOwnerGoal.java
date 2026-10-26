@@ -31,8 +31,13 @@ public class GazeSnatcherFollowOwnerGoal extends Goal {
         if (!snatcher.isTamed() || snatcher.isOrderedToSit()) {
             return false;
         }
+        LivingEntity combatTarget = snatcher.getTarget();
+        if (combatTarget != null && combatTarget.isAlive()) {
+            return false;
+        }
         LivingEntity owner = snatcher.getOwner();
-        if (owner == null || owner.isSpectator()) {
+        // Dead / spectator owner: stay put and keep fighting last attacker instead of pathing to corpse
+        if (owner == null || !owner.isAlive() || owner.isSpectator()) {
             return false;
         }
         if (snatcher.distanceToSqr(owner) < (double) startDistance * startDistance) {
@@ -44,7 +49,11 @@ public class GazeSnatcherFollowOwnerGoal extends Goal {
 
     @Override
     public boolean canContinueToUse() {
-        if (snatcher.isOrderedToSit() || owner == null) {
+        if (snatcher.isOrderedToSit() || owner == null || !owner.isAlive()) {
+            return false;
+        }
+        LivingEntity combatTarget = snatcher.getTarget();
+        if (combatTarget != null && combatTarget.isAlive()) {
             return false;
         }
         PathNavigation nav = snatcher.getNavigation();

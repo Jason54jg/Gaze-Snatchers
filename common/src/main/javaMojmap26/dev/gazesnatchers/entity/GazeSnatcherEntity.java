@@ -1,4 +1,4 @@
-﻿package dev.gazesnatchers.entity;
+package dev.gazesnatchers.entity;
 
 import dev.gazesnatchers.entity.ai.GazeSnatcherFollowOwnerGoal;
 import dev.gazesnatchers.entity.ai.GazeSnatcherOwnerHurtByTargetGoal;
@@ -122,15 +122,23 @@ public class GazeSnatcherEntity extends Monster implements GeoEntity, OwnableEnt
                 return !GazeSnatcherEntity.this.isTamed() && super.canUse();
             }
         });
-        this.goalSelector.addGoal(2, new GazeSnatcherFollowOwnerGoal(this, 1.15D, 8.0F, 3.0F));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.15D, true) {
+        // Melee before follow (wolf-like): follow must not steal MOVE/LOOK during combat
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, true) {
             @Override
             public boolean canUse() {
                 return GazeSnatcherEntity.this.isTamed()
                         && !GazeSnatcherEntity.this.isOrderedToSit()
                         && super.canUse();
             }
+
+            @Override
+            public boolean canContinueToUse() {
+                return GazeSnatcherEntity.this.isTamed()
+                        && !GazeSnatcherEntity.this.isOrderedToSit()
+                        && super.canContinueToUse();
+            }
         });
+        this.goalSelector.addGoal(3, new GazeSnatcherFollowOwnerGoal(this, 1.15D, 8.0F, 3.0F));
         this.goalSelector.addGoal(4, new GazeSnatcherPositionGoal(this));
         this.goalSelector.addGoal(5, new GazeSnatcherStealGoal(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 12.0F));
@@ -213,17 +221,31 @@ public class GazeSnatcherEntity extends Monster implements GeoEntity, OwnableEnt
     }
 
     public boolean isOwnedBy(LivingEntity entity) {
-        return this.isTamed() && entity != null && entity.equals(this.getOwner());
+        return entity != null && entity == this.getOwner();
+    }
+
+    @Override
+    public boolean canAttack(LivingEntity target) {
+        return !this.isOwnedBy(target) && super.canAttack(target);
     }
 
     public boolean wantsToAttack(LivingEntity target, LivingEntity owner) {
         if (target == null || target == this || target == owner) {
             return false;
         }
+        if (!target.isAlive()) {
+            return false;
+        }
         if (target instanceof GazeSnatcherEntity other && other.isTamed() && other.isOwnedBy(owner)) {
             return false;
         }
-        return !owner.isAlliedTo(target);
+        if (target instanceof OwnableEntity ownable) {
+            LivingEntity otherOwner = ownable.getOwner();
+            if (otherOwner != null && otherOwner == owner) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -255,7 +277,7 @@ public class GazeSnatcherEntity extends Monster implements GeoEntity, OwnableEnt
 
     private boolean canTeleportTo(BlockPos pos) {
         BlockState below = this.level().getBlockState(pos.below());
-        return below.blocksMotion()
+        return below.isSolid()
                 && this.level().noCollision(this, this.getBoundingBox().move(
                 pos.getX() + 0.5D - this.getX(),
                 pos.getY() - this.getY(),
@@ -416,9 +438,9 @@ public class GazeSnatcherEntity extends Monster implements GeoEntity, OwnableEnt
         }
         int min = dev.gazesnatchers.config.GazeSnatchersConfig.minBabies();
         int max = dev.gazesnatchers.config.GazeSnatchersConfig.maxBabies();
-        int count = min + serverLevel.random.nextInt(Math.max(1, max - min + 1));
+        int count = min + serverLevel.getRandom().nextInt(Math.max(1, max - min + 1));
         ItemStack stolenLoot = lastStolenItem != null ? lastStolenItem : ItemStack.EMPTY;
-        int lootCarrier = !stolenLoot.isEmpty() ? serverLevel.random.nextInt(count) : -1;
+        int lootCarrier = !stolenLoot.isEmpty() ? serverLevel.getRandom().nextInt(count) : -1;
         for (int i = 0; i < count; i++) {
             BabyGazeSnatcherEntity baby = ModEntities.BABY_GAZE_SNATCHER.create(serverLevel, EntitySpawnReason.MOB_SUMMONED);
             if (baby == null) {
@@ -436,7 +458,7 @@ public class GazeSnatcherEntity extends Monster implements GeoEntity, OwnableEnt
             baby.setYRot(this.getYRot());
             baby.finalizeSpawn(serverLevel, serverLevel.getCurrentDifficultyAt(this.blockPosition()), EntitySpawnReason.MOB_SUMMONED, null);
             serverLevel.addFreshEntity(baby);
-            baby.playSound(ModSounds.BABY_GAZE_SNATCHER_AMBIENT, 0.8F, 1.4F + serverLevel.random.nextFloat() * 0.3F);
+            baby.playSound(ModSounds.BABY_GAZE_SNATCHER_AMBIENT, 0.8F, 1.4F + serverLevel.getRandom().nextFloat() * 0.3F);
         }
     }
 

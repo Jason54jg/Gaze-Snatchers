@@ -7,7 +7,7 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 
 import java.util.EnumSet;
 
-/** Attaque qui a blessé le propriétaire. */
+/** Attaque qui a blessé le propriétaire (même si le proprio est en train de mourir). */
 public class GazeSnatcherOwnerHurtByTargetGoal extends TargetGoal {
     private final GazeSnatcherEntity snatcher;
     private LivingEntity ownerLastHurtBy;
