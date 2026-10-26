@@ -1,6 +1,8 @@
-# Minecraft 26.x (26.1 → 26.3)
+# Minecraft 26.x (26.1.2 → 26.3)
 
-Minecraft **26.1+** is **unobfuscated** (Mojang names). It is **not** the same as the Architectury / 1.21.11 profile.
+Minecraft **26.1.2+** is **unobfuscated** (Mojang names). It is **not** the same as the Architectury / 1.21.11 profile.
+
+Supported matrix: **26.1.2**, **26.2**, **26.3** (Fabric + NeoForge).
 
 ## Build
 
@@ -8,7 +10,7 @@ Minecraft **26.1+** is **unobfuscated** (Mojang names). It is **not** the same a
 - **JDK 25** for Minecraft 26.x
 - **JDK 21** for Minecraft 1.21.11
 - Loom **no-remap** (`unobfuscated=true`) on 26.x
-- Profiles: `gradle/versions/26.1.properties` … `26.3.properties`
+- Profiles: `gradle/versions/26.1.2.properties` … `26.3.properties`
 
 Dedicated sources (no Architectury API on 26.x):
 
@@ -31,8 +33,6 @@ BUILD_26=true ./scripts/build-all-versions.sh
 
 Without `BUILD_26=true`, only **1.21.11** is built (JDK 21).
 
-**26.1** / **26.1.1** : `skip_neoforge=true` (Fabric only).
-
 ## Single-profile Gradle
 
 ```powershell
@@ -48,3 +48,4 @@ Get-Content gradle/versions/common.properties, gradle/versions/26.3.properties |
 - Sources sous `javaMojmap26/` ; métadonnées dans `*/unobfuscated/resources/`
 - Rebuild : `BUILD_26=true` + script `scripts/build-all-versions`
 - Sans ce flag : build **1.21.11** uniquement
+- Matrice 26.x : **26.1.2 / 26.2 / 26.3** (Fabric + NeoForge)

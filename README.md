@@ -1,6 +1,6 @@
 # Gaze Snatchers
 
-Dual-loader Minecraft mod (**Fabric** + **NeoForge**) for **Minecraft 1.21.11** and **26.1 / 26.1.1 / 26.1.2 / 26.2 / 26.3**.
+Dual-loader Minecraft mod (**Fabric** + **NeoForge**) for **Minecraft 1.21.11** and **26.1.2 / 26.2 / 26.3**.
 
 A creepy mob that appears when you sleep at night, stares you down, and may steal an item if you ignore it. Kill it and it splits into 2–4 aggressive babies.
 

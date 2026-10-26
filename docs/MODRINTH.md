@@ -47,7 +47,7 @@ Paste into the Modrinth **Description** editor (Markdown):
 
 A creepy mob that appears when you sleep at night, stares you down… and may steal an inventory item if you look away too long.
 
-**Fabric** + **NeoForge** · Minecraft **1.21.11** and **26.1 / 26.1.1 / 26.1.2 / 26.2 / 26.3**
+**Fabric** + **NeoForge** · Minecraft **1.21.11** and **26.1.2 / 26.2 / 26.3**
 
 ## Features
 
@@ -107,7 +107,7 @@ Use this for the first release changelog on every game version you upload:
 - Config: `config/gazesnatchers.json`
 - Commands: `/gazesnatchers spawn`, `trigger_sleep`, `reload_config`
 - Loaders: Fabric + NeoForge
-- Minecraft: 1.21.11, 26.1, 26.1.1, 26.1.2, 26.2, 26.3
+- Minecraft: 1.21.11, 26.1.2, 26.2, 26.3
 ```
 
 ---
@@ -121,7 +121,7 @@ For each Minecraft version under `release/<mc>/`:
 3. Set **loaders**: `fabric` and/or `neoforge` to match the JAR(s).
 4. Upload:
    - `gazesnatchers-fabric-1.0.0-<mc>+fabric.jar`
-   - `gazesnatchers-neoforge-1.0.0-<mc>+neoforge.jar` (skip on 26.1 / 26.1.1)
+   - `gazesnatchers-neoforge-1.0.0-<mc>+neoforge.jar`
 5. Add **required** dependencies:
    - Fabric builds → Fabric API + GeckoLib
    - NeoForge builds → GeckoLib
@@ -133,7 +133,6 @@ For each Minecraft version under `release/<mc>/`:
 | Minecraft | Suggested GeckoLib |
 |-----------|--------------------|
 | 1.21.11 | 5.4.5 |
-| 26.1 / 26.1.1 | 5.5 |
 | 26.1.2 | 5.5.2 |
 | 26.2 | 5.5.5 |
 | 26.3 | 5.5.7 |

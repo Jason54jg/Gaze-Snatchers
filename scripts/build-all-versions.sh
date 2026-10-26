@@ -7,7 +7,7 @@ VERSIONS=(1.21.11)
 
 if [[ "${BUILD_26:-false}" == "true" ]]; then
   VERSIONS+=(
-    26.1 26.1.1 26.1.2 26.2 26.3
+    26.1.2 26.2 26.3
   )
 fi
 

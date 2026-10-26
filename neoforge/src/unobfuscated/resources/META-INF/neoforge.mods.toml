@@ -13,7 +13,7 @@ logoFile = "assets/gazesnatchers/textures/icon.png"
 [[dependencies.gazesnatchers]]
 modId = "neoforge"
 type = "required"
-versionRange = "[26.1,)"
+versionRange = "[26.1.2,)"
 ordering = "NONE"
 side = "BOTH"
 

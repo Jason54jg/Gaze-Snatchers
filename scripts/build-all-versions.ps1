@@ -9,7 +9,7 @@ Set-Location $Root
 
 $Versions = @("1.21.11")
 if ($env:BUILD_26 -eq "true") {
-    $Versions += @("26.1", "26.1.1", "26.1.2", "26.2", "26.3")
+    $Versions += @("26.1.2", "26.2", "26.3")
 }
 
 function Merge-Properties([string]$mc) {
@@ -65,7 +65,7 @@ foreach ($mc in $Versions) {
     New-Item -ItemType Directory -Force -Path $out | Out-Null
     Get-ChildItem $out -Filter "*.jar" -ErrorAction SilentlyContinue | Remove-Item -Force
 
-    # Exact match: *-26.1+fabric.jar must not also pick *-26.1.1+fabric.jar
+    # Exact match: *-26.1.2+fabric.jar must not also pick a longer suffix
     Get-ChildItem "fabric\build\libs" -Filter "gazesnatchers-*$mc+fabric.jar" -EA SilentlyContinue |
         ForEach-Object { Copy-Item $_.FullName (Join-Path $out $_.Name) -Force }
 
