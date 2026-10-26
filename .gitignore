@@ -33,3 +33,5 @@ cli/target/
 *.log
 *.bak
 *.hprof
+hs_err_pid*
+replay_pid*
