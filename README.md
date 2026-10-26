@@ -65,4 +65,4 @@ Toute la logique (spawn, vol, division) est **serveur-side** ; compatible multip
 
 ## Crédits & licence
 
-MIT — voir `LICENSE`. Textures/sons placeholders : remplacez avant publication Modrinth (voir `docs/ART_AND_AUDIO.md`).
+MIT — voir `LICENSE`. Modèles Blockbench, sons et texte de fiche : `docs/ART_AND_AUDIO.md` et `docs/MODRINTH.md`.

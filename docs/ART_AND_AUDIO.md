@@ -1,25 +1,33 @@
 # Gaze Snatchers — art, modèles Blockbench & audio
 
-## Modèles Blockbench (référence fournie)
+## Modèles Blockbench
+
+Source : `blockbench/gaze_snatcher.bbmodel` et `blockbench/baby_gaze_snatcher.bbmodel` (format Modded Entity, box-UV). `tools/build_art.py` réécrit les textures, les classes Java et les rendus à partir de cette hiérarchie.
+
+Les os exportés sont `Head`, `Body`, `LeftArm`, `RightArm`, `LeftLeg`, `RightLeg` (adulte, plus `Jaw` et `Claw`) et `Head`, `Body`, `Left_Foreleg`, `Right_Foreleg`, `Left_Hindleg`, `Right_Hindleg` (bébé). `setupAnim` reprend le balancement `idle` du fichier et un cycle de marche sur ces os : Minecraft ne charge pas les keyframes Blockbench tout seul.
+
+## Proportions
 
 ### Adulte (`gaze_snatcher`)
 - **Format** : Java Entity / Minecraft 1.21+
 - **Hiérarchie** : `Root` → `Head`, `Body`, `LeftArm`, `RightArm`, `LeftLeg`, `RightLeg`
 - **Proportions** : tête 12×12×12, corps 6×20×4, bras 3×26×3, jambes 3×22×3
 - **Texture** : `assets/gazesnatchers/textures/entity/gaze_snatcher.png` (128×128)
-- **Yeux émissifs** : texture `gaze_snatcher_emissive.png` (placeholder fourni) — brancher en rendu émissif / resource pack pour le bloom
+- **Yeux émissifs** : `gaze_snatcher_emissive.png`, branchés par `GazeSnatcherEyesLayer`
 
 ### Bébé (`baby_gaze_snatcher`)
 - **Hiérarchie** : `Root` → `Head`, `Body`, `Left_Foreleg`, `Right_Foreleg`, `Left_Hindleg`, `Right_Hindleg`
 - **Texture** : `textures/entity/baby_gaze_snatcher.png` (64×64)
 
-Les classes `GazeSnatcherModel` et `BabyGazeSnatcherModel` reproduisent cette hiérarchie pour le rendu in-game. Pour remplacer par un export Blockbench `.java`, remplacez les `LayerDefinition` par le fichier exporté et gardez le même `ModelLayerLocation`.
+## Textures
 
-## Textures placeholder
+`gaze_snatcher.png` (128×128) et `baby_gaze_snatcher.png` (64×64) suivent le dépliage box-UV des `.bbmodel` : gris-noir veiné, yeux blancs. Les PNG émissifs ne gardent que les yeux.
 
-Les PNG actuels sont des placeholders procéduraux. Remplacez-les par vos textures finales (gris-noir veiné, yeux blancs émissifs).
+## Audio
 
-## Spécifications audio (à remplacer)
+Les `.ogg` de `assets/gazesnatchers/sounds/` portent les durées et le caractère ci-dessous (générés par `tools/build_art.py`, noms inchangés).
+
+## Spécifications audio
 
 | ID | Description cible | Durée | Notes |
 |----|-------------------|-------|-------|
@@ -28,8 +36,6 @@ Les PNG actuels sont des placeholders procéduraux. Remplacez-les par vos textur
 | `gaze_snatcher_steal` | Rire étouffé / aspiration | ~0.6 s | One-shot |
 | `gaze_snatcher_death` | Cri long → éclatement en petits cris | ~1.5 s | Enchaîner avec spawn bébés |
 | `baby_*` | Pleurs/gémissements aigus déformés | loops courts | Pitch 1.2–1.5 |
-
-Les fichiers `.ogg` dans `assets/gazesnatchers/sounds/` sont des **placeholders** (mix bruit/sine léger) : remplacez-les sans changer les noms.
 
 ## Rendu yeux (in-game)
 
