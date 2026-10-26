@@ -1,6 +1,7 @@
 package dev.gazesnatchers.registry;
 
 import dev.gazesnatchers.GazeSnatchers;
+import dev.gazesnatchers.item.GazeBindingCharmItem;
 import dev.gazesnatchers.item.GazeDraughtItem;
 import java.util.function.Function;
 import net.minecraft.core.component.DataComponents;
@@ -10,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.component.TypedEntityData;
 
@@ -17,6 +19,7 @@ public final class ModItems {
     public static Item GAZE_SHARD;
     public static Item GAZE_WARD_AMULET;
     public static Item GAZE_DRAUGHT;
+    public static Item GAZE_BINDING_CHARM;
     public static Item GAZE_SNATCHER_SPAWN_EGG;
     public static Item BABY_GAZE_SNATCHER_SPAWN_EGG;
 
@@ -24,6 +27,10 @@ public final class ModItems {
         GAZE_SHARD = register("gaze_shard", Item::new, new Item.Properties());
         GAZE_WARD_AMULET = register("gaze_ward_amulet", Item::new, new Item.Properties().stacksTo(1));
         GAZE_DRAUGHT = register("gaze_draught", GazeDraughtItem::new, new Item.Properties());
+        GAZE_BINDING_CHARM = register(
+                "gaze_binding_charm",
+                GazeBindingCharmItem::new,
+                new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
     }
 
     /** Appelé après {@link ModEntities#register()} — format 26.x (composant entity_data + setId). */

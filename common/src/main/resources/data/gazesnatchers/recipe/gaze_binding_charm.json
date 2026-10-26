@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "SES",
+    "GAG",
+    "SNS"
+  ],
+  "key": {
+    "S": "gazesnatchers:gaze_shard",
+    "E": "minecraft:echo_shard",
+    "G": "minecraft:gold_ingot",
+    "A": "gazesnatchers:gaze_ward_amulet",
+    "N": "minecraft:netherite_scrap"
+  },
+  "result": {
+    "id": "gazesnatchers:gaze_binding_charm",
+    "count": 1
+  }
+}

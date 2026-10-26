@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Entities — Gaze Snatchers</title>
-  <meta name="description" content="Gaze Snatcher and Baby Gaze Snatcher: models, behavior, spawn, and loot.">
+  <meta name="description" content="Gaze Snatcher and Baby Gaze Snatcher: GeckoLib models, wild behavior, taming, spawn, and loot.">
   <link rel="icon" href="assets/icon.png" type="image/png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -31,18 +31,20 @@
     <h2>Gaze Snatcher</h2>
     <div class="entity-head">
       <figure class="entity-portrait">
-        <img src="assets/models/gaze_snatcher_ref_front.jpg" alt="Gaze Snatcher front render">
+        <img src="assets/models/gaze_snatcher_ref_front.png" alt="Gaze Snatcher front render from GeckoLib model">
       </figure>
       <div>
         <p>
           ID: <code>gazesnatchers:gaze_snatcher</code>
         </p>
         <ul>
-          <li><strong>Day</strong> — passive; burns in sunlight.</li>
+          <li><strong>Model</strong> — GeckoLib / Blockbench geo + animations.</li>
+          <li><strong>Day (wild)</strong> — passive; burns in sunlight.</li>
           <li><strong>Night / sleep</strong> — chance to appear in front of a player who lies down (<code>spawnChance</code>, default ~72%).</li>
           <li><strong>Gaze</strong> — stands still and stares. Fail to break attention soon enough (<code>ticksBeforeSteal</code>, default 160 ticks ≈ 8s) and it steals an item.</li>
           <li><strong>After steal</strong> — may despawn (<code>despawnAfterSteal</code>).</li>
-          <li><strong>On death</strong> — splits into 2–4 babies; one may inherit the stolen item.</li>
+          <li><strong>On death (wild)</strong> — splits into 2–4 babies; one may inherit the stolen item.</li>
+          <li><strong>Taming</strong> — right-click with a <a href="items.html">Gaze Binding Charm</a>: follows owner, defends in combat, sits on empty-hand click; no steal / no sleep block / no sun burn / no baby split.</li>
           <li><strong>Loot</strong> — 0–2 Gaze Shards when killed by a player.</li>
         </ul>
         <p>Summon: <code>/summon gazesnatchers:gaze_snatcher</code></p>
@@ -51,23 +53,23 @@
 
     <div class="gallery">
       <figure>
-        <img src="assets/models/gaze_snatcher_ref_front.jpg" alt="Adult front view">
-        <figcaption>Front — glowing eyes</figcaption>
+        <img src="assets/models/gaze_snatcher_ref_front.png" alt="Adult front view">
+        <figcaption>Front — from <code>gaze_snatcher.geo.json</code></figcaption>
       </figure>
       <figure>
-        <img src="assets/models/gaze_snatcher_ref_side.jpg" alt="Adult side view">
-        <figcaption>Side — tall thin frame</figcaption>
+        <img src="assets/models/gaze_snatcher_ref_side.png" alt="Adult side view">
+        <figcaption>Side — from geo model</figcaption>
       </figure>
       <figure>
         <img class="skin-sheet" src="assets/models/gaze_snatcher_skin.png" alt="Adult texture sheet" style="aspect-ratio: auto; width: 100%;">
-        <figcaption>Texture sheet (128×128)</figcaption>
+        <figcaption>In-game texture (<code>textures/entity/gaze_snatcher.png</code>)</figcaption>
       </figure>
     </div>
 
     <h2>Baby Gaze Snatcher</h2>
     <div class="entity-head">
       <figure class="entity-portrait">
-        <img src="assets/models/baby_gaze_snatcher_ref_blockbench.jpg" alt="Baby Gaze Snatcher Blockbench model">
+        <img src="assets/models/baby_gaze_snatcher_ref_front.png" alt="Baby Gaze Snatcher front from GeckoLib model">
       </figure>
       <div>
         <p>
@@ -78,7 +80,8 @@
           <li>Mostly spawn from the adult’s death split (2–4 per config).</li>
           <li>Drop: <strong>1–3 Gaze Shards</strong>.</li>
           <li>The “carrier” baby may return the stolen item on death (config-dependent).</li>
-          <li>Quad model: large head, short body, four stubby legs, purple emissive eyes.</li>
+          <li>GeckoLib model: large head, short body, four stubby legs, glowing eyes.</li>
+          <li>Cannot be tamed (Binding Charm works on adults only).</li>
         </ul>
         <p>Summon: <code>/summon gazesnatchers:baby_gaze_snatcher</code></p>
       </div>
@@ -86,12 +89,16 @@
 
     <div class="gallery">
       <figure>
-        <img src="assets/models/baby_gaze_snatcher_ref_blockbench.jpg" alt="Baby model reference">
-        <figcaption>Blockbench reference</figcaption>
+        <img src="assets/models/baby_gaze_snatcher_ref_front.png" alt="Baby front view">
+        <figcaption>Front — from <code>baby_gaze_snatcher.geo.json</code></figcaption>
+      </figure>
+      <figure>
+        <img src="assets/models/baby_gaze_snatcher_ref_side.png" alt="Baby side view">
+        <figcaption>Side — from geo model</figcaption>
       </figure>
       <figure>
         <img class="skin-sheet" src="assets/models/baby_gaze_snatcher_skin.png" alt="Baby texture sheet" style="aspect-ratio: auto; width: 100%;">
-        <figcaption>Texture sheet (64×64)</figcaption>
+        <figcaption>In-game texture (<code>textures/entity/baby_gaze_snatcher.png</code>)</figcaption>
       </figure>
     </div>
 

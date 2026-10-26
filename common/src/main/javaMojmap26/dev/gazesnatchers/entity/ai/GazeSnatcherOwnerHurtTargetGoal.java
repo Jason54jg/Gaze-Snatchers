@@ -1,0 +1,47 @@
+package dev.gazesnatchers.entity.ai;
+
+import dev.gazesnatchers.entity.GazeSnatcherEntity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+
+import java.util.EnumSet;
+
+/** Attaque la cible que le propriétaire vient de frapper. */
+public class GazeSnatcherOwnerHurtTargetGoal extends TargetGoal {
+    private final GazeSnatcherEntity snatcher;
+    private LivingEntity ownerLastHurt;
+    private int timestamp;
+
+    public GazeSnatcherOwnerHurtTargetGoal(GazeSnatcherEntity snatcher) {
+        super(snatcher, false);
+        this.snatcher = snatcher;
+        this.setFlags(EnumSet.of(Flag.TARGET));
+    }
+
+    @Override
+    public boolean canUse() {
+        if (!snatcher.isTamed() || snatcher.isOrderedToSit()) {
+            return false;
+        }
+        LivingEntity owner = snatcher.getOwner();
+        if (owner == null) {
+            return false;
+        }
+        ownerLastHurt = owner.getLastHurtMob();
+        int t = owner.getLastHurtMobTimestamp();
+        return t != timestamp
+                && canAttack(ownerLastHurt, TargetingConditions.DEFAULT)
+                && snatcher.wantsToAttack(ownerLastHurt, owner);
+    }
+
+    @Override
+    public void start() {
+        this.mob.setTarget(ownerLastHurt);
+        LivingEntity owner = snatcher.getOwner();
+        if (owner != null) {
+            timestamp = owner.getLastHurtMobTimestamp();
+        }
+        super.start();
+    }
+}

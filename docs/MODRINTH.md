@@ -55,6 +55,7 @@ A creepy mob that appears when you sleep at night, stares you down… and may st
 - **Silent theft** — Ignore its gaze long enough and it steals one item, then may despawn.
 - **Death split** — Killing the adult bursts it into 2–4 hostile, fast babies.
 - **Gaze Ward Amulet** — Crafted from Gaze Shards; slows the steal if kept in your inventory.
+- **Gaze Binding Charm** — Rare craft; right-click an adult Gaze Snatcher to tame it (follows & defends you).
 - **Sunlight** — Adults and babies burn in daylight.
 - **GeckoLib models** — Animated Blockbench / GeckoLib entity models.
 

@@ -67,6 +67,7 @@ File `config/gazesnatchers.json` (created on first launch):
 - **Adult**: passive by day; at night, may spawn in front of a sleeping player, stares, steals an item, burns in sunlight.
 - **Babies**: always hostile, fast, drop 1–3 Gaze Shards.
 - **Gaze Ward Amulet**: craft 4 shards + amethyst shard (reduces steal speed).
+- **Gaze Binding Charm**: rare craft (shards + ward amulet + echo shard + gold + netherite scrap). Right-click an adult to tame — it follows and defends you (empty hand click to sit/stand).
 
 Quick test: spawn eggs in the creative tab, or `/summon gazesnatchers:gaze_snatcher`.
 

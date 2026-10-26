@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Items — Gaze Snatchers</title>
-  <meta name="description" content="Gaze Shard, Gaze Ward Amulet, Gaze Draught, and illustrated recipes.">
+  <meta name="description" content="Gaze Shard, Gaze Ward Amulet, Gaze Binding Charm, Gaze Draught, and illustrated recipes.">
   <link rel="icon" href="assets/icon.png" type="image/png">
   <link rel="stylesheet" href="assets/style.css">
 </head>
@@ -26,7 +26,7 @@
 
   <main class="wrap" style="padding-top: 2.75rem;">
     <h1 style="font-size: clamp(1.75rem, 4vw, 2.25rem); margin: 0 0 0.5rem;">Items</h1>
-    <p class="muted">Drops, crafts, and protections against the gaze.</p>
+    <p class="muted">Drops, crafts, protection — and a rare charm to bind an adult as a companion.</p>
 
     <h2>Gaze Shard</h2>
     <div class="item-card" style="margin-bottom: 1.25rem;">
@@ -37,7 +37,7 @@
       </div>
     </div>
     <p>
-      Dropped by Gaze Snatchers and babies. Used to craft the amulet and draught.
+      Dropped by Gaze Snatchers and babies. Used to craft the amulet, draught, and binding charm.
     </p>
 
     <h2>Gaze Ward Amulet</h2>
@@ -49,7 +49,7 @@
       </div>
     </div>
     <p>
-      Configurable via <code>amuletStealReduction</code> (default 0.55).
+      Configurable via <code>amuletStealReduction</code> (default 0.55). Also required for the Binding Charm.
     </p>
 
     <div class="craft">
@@ -72,6 +72,46 @@
         <h3>Recipe — Gaze Ward Amulet</h3>
         <p>4 × Gaze Shard + 1 × Amethyst Shard (cross shape).</p>
         <span class="tag">crafting_shaped</span>
+      </div>
+    </div>
+
+    <h2>Gaze Binding Charm</h2>
+    <div class="item-card" style="margin-bottom: 1.25rem;">
+      <img src="assets/items/gaze_binding_charm.png" alt="Gaze Binding Charm">
+      <div>
+        <strong>Gaze Binding Charm</strong>
+        <span><code>gazesnatchers:gaze_binding_charm</code> — tame an adult Gaze Snatcher</span>
+      </div>
+    </div>
+    <p>
+      Right-click a <strong>wild adult</strong> to bind it. The companion follows you (teleports if far),
+      fights what hurts you and what you attack, no longer steals or blocks sleep, and ignores sunlight.
+      Empty-hand right-click toggles sit / stand. A tamed adult does not split into babies on death.
+    </p>
+
+    <div class="craft">
+      <div class="craft-grid" aria-label="Crafting grid for Gaze Binding Charm">
+        <div class="slot filled"><img src="assets/items/gaze_shard.png" alt="Gaze Shard"></div>
+        <div class="slot filled"><img src="assets/items/echo_shard.svg" alt="Echo Shard"></div>
+        <div class="slot filled"><img src="assets/items/gaze_shard.png" alt="Gaze Shard"></div>
+        <div class="slot filled"><img src="assets/items/gold_ingot.svg" alt="Gold Ingot"></div>
+        <div class="slot filled"><img src="assets/items/gaze_ward_amulet.png" alt="Gaze Ward Amulet"></div>
+        <div class="slot filled"><img src="assets/items/gold_ingot.svg" alt="Gold Ingot"></div>
+        <div class="slot filled"><img src="assets/items/gaze_shard.png" alt="Gaze Shard"></div>
+        <div class="slot filled"><img src="assets/items/netherite_scrap.svg" alt="Netherite Scrap"></div>
+        <div class="slot filled"><img src="assets/items/gaze_shard.png" alt="Gaze Shard"></div>
+      </div>
+      <div class="craft-arrow" aria-hidden="true">→</div>
+      <div class="craft-result">
+        <img src="assets/items/gaze_binding_charm.png" alt="Gaze Binding Charm">
+      </div>
+      <div class="craft-meta">
+        <h3>Recipe — Gaze Binding Charm</h3>
+        <p>
+          6 × Gaze Shard + Gaze Ward Amulet + Echo Shard + 2 × Gold Ingot + Netherite Scrap.
+        </p>
+        <span class="tag">crafting_shaped</span>
+        <span class="tag">epic</span>
       </div>
     </div>
 
@@ -117,7 +157,7 @@
     <p>
       A stolen item may show the label
       <code>%s (stolen)</code>. A random baby can carry it
-      after the adult dies.
+      after a <em>wild</em> adult dies.
     </p>
 
     <hr>

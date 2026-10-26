@@ -5,6 +5,7 @@ import dev.gazesnatchers.config.GazeSnatchersConfig;
 import dev.gazesnatchers.entity.GazeSnatcherEntity;
 import dev.gazesnatchers.registry.ModEntities;
 import dev.gazesnatchers.registry.ModSounds;
+import dev.gazesnatchers.util.GroundSpawn;
 import dev.gazesnatchers.util.WorldTime;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -53,8 +54,8 @@ public final class SleepWatcher {
 
         Vec3 forward = player.getViewVector(1.0F).normalize();
         Vec3 spawn = player.position().add(forward.scale(2.2D));
-        BlockPos feet = BlockPos.containing(spawn.x, spawn.y, spawn.z);
-        snatcher.setPos(spawn.x, feet.getY(), spawn.z);
+        GroundSpawn.placeOnSurface(level, snatcher, spawn.x, spawn.z, spawn.y);
+        BlockPos feet = snatcher.blockPosition();
         snatcher.setYRot(player.getYRot() + 180.0F);
         snatcher.linkSleeper(player);
         snatcher.finalizeSpawn(level, level.getCurrentDifficultyAt(feet), EntitySpawnReason.MOB_SUMMONED, null);

@@ -40,6 +40,7 @@ public class GazeSnatchersNeoForge {
             event.accept(ModItems.GAZE_SHARD);
             event.accept(ModItems.GAZE_WARD_AMULET);
             event.accept(ModItems.GAZE_DRAUGHT);
+            event.accept(ModItems.GAZE_BINDING_CHARM);
             event.accept(ModItems.GAZE_SNATCHER_SPAWN_EGG);
             event.accept(ModItems.BABY_GAZE_SNATCHER_SPAWN_EGG);
         }

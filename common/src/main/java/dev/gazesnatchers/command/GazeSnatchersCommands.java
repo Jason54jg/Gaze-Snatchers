@@ -7,6 +7,7 @@ import dev.gazesnatchers.entity.BabyGazeSnatcherEntity;
 import dev.gazesnatchers.entity.GazeSnatcherEntity;
 import dev.gazesnatchers.registry.ModEntities;
 import dev.gazesnatchers.sleep.SleepWatcher;
+import dev.gazesnatchers.util.GroundSpawn;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
@@ -42,11 +43,10 @@ public final class GazeSnatchersCommands {
         }
         ServerLevel level = player.level();
         Vec3 look = player.getEyePosition().add(player.getViewVector(1.0F).scale(2.0D));
-        BlockPos feet = BlockPos.containing(look);
 
         return switch (type.toLowerCase()) {
-            case "adult", "gaze_snatcher" -> spawnEntity(source, level, look, feet, ModEntities.GAZE_SNATCHER.create(level, EntitySpawnReason.COMMAND));
-            case "baby", "baby_gaze_snatcher" -> spawnEntity(source, level, look, feet, ModEntities.BABY_GAZE_SNATCHER.create(level, EntitySpawnReason.COMMAND));
+            case "adult", "gaze_snatcher" -> spawnEntity(source, level, look, ModEntities.GAZE_SNATCHER.create(level, EntitySpawnReason.COMMAND));
+            case "baby", "baby_gaze_snatcher" -> spawnEntity(source, level, look, ModEntities.BABY_GAZE_SNATCHER.create(level, EntitySpawnReason.COMMAND));
             default -> {
                 source.sendFailure(Component.literal("Types : adult, baby"));
                 yield 0;
@@ -54,16 +54,17 @@ public final class GazeSnatchersCommands {
         };
     }
 
-    private static int spawnEntity(CommandSourceStack source, ServerLevel level, Vec3 pos, BlockPos feet, net.minecraft.world.entity.Entity entity) {
+    private static int spawnEntity(CommandSourceStack source, ServerLevel level, Vec3 pos, net.minecraft.world.entity.Entity entity) {
         if (entity == null) {
             source.sendFailure(Component.literal("Échec de création de l'entité."));
             return 0;
         }
-        entity.setPos(pos.x, feet.getY(), pos.z);
+        GroundSpawn.placeOnSurface(level, entity, pos.x, pos.z, pos.y);
+        BlockPos at = entity.blockPosition();
         if (entity instanceof GazeSnatcherEntity snatcher) {
-            snatcher.finalizeSpawn(level, level.getCurrentDifficultyAt(feet), EntitySpawnReason.COMMAND, null);
+            snatcher.finalizeSpawn(level, level.getCurrentDifficultyAt(at), EntitySpawnReason.COMMAND, null);
         } else if (entity instanceof BabyGazeSnatcherEntity baby) {
-            baby.finalizeSpawn(level, level.getCurrentDifficultyAt(feet), EntitySpawnReason.COMMAND, null);
+            baby.finalizeSpawn(level, level.getCurrentDifficultyAt(at), EntitySpawnReason.COMMAND, null);
         }
         level.addFreshEntity(entity);
         source.sendSuccess(() -> Component.literal("Entité spawnée."), true);

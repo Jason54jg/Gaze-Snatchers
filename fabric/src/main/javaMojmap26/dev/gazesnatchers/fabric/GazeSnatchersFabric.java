@@ -28,6 +28,7 @@ public class GazeSnatchersFabric implements ModInitializer {
             output.accept(ModItems.GAZE_SHARD);
             output.accept(ModItems.GAZE_WARD_AMULET);
             output.accept(ModItems.GAZE_DRAUGHT);
+            output.accept(ModItems.GAZE_BINDING_CHARM);
             output.accept(ModItems.GAZE_SNATCHER_SPAWN_EGG);
             output.accept(ModItems.BABY_GAZE_SNATCHER_SPAWN_EGG);
         });

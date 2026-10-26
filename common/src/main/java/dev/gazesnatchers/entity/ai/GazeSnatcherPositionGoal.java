@@ -21,7 +21,7 @@ public class GazeSnatcherPositionGoal extends Goal {
 
     @Override
     public boolean canUse() {
-        if (snatcher.isDayPassive()) {
+        if (snatcher.isTamed() || snatcher.isDayPassive()) {
             return false;
         }
         ServerPlayer sleeper = snatcher.getLinkedSleeper();
