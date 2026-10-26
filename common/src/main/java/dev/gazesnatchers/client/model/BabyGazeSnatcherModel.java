@@ -22,7 +22,10 @@ public class BabyGazeSnatcherModel extends EntityModel<LivingEntityRenderState> 
             GazeSnatchers.id("baby_gaze_snatcher"), "main");
 
     private final ModelPart head;
+    private final ModelPart jaw;
     private final ModelPart body;
+    private final ModelPart tail;
+    private final ModelPart tailTip;
     private final ModelPart leftFore;
     private final ModelPart rightFore;
     private final ModelPart leftHind;
@@ -31,7 +34,10 @@ public class BabyGazeSnatcherModel extends EntityModel<LivingEntityRenderState> 
     public BabyGazeSnatcherModel(ModelPart root) {
         super(root);
         this.head = root.getChild("Head");
+        this.jaw = this.head.getChild("Jaw");
         this.body = root.getChild("Body");
+        this.tail = this.body.getChild("Tail");
+        this.tailTip = this.tail.getChild("TailTip");
         this.leftFore = root.getChild("Left_Foreleg");
         this.rightFore = root.getChild("Right_Foreleg");
         this.leftHind = root.getChild("Left_Hindleg");
@@ -48,6 +54,17 @@ public class BabyGazeSnatcherModel extends EntityModel<LivingEntityRenderState> 
         PartDefinition rightFore = parent.addOrReplaceChild("Right_Foreleg", CubeListBuilder.create().texOffs(36, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 21.0F, -2.0F));
         PartDefinition leftHind = parent.addOrReplaceChild("Left_Hindleg", CubeListBuilder.create().texOffs(44, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(2.0F, 21.0F, 2.0F));
         PartDefinition rightHind = parent.addOrReplaceChild("Right_Hindleg", CubeListBuilder.create().texOffs(52, 0).addBox(-1.0F, 0.0F, -1.0F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(-2.0F, 21.0F, 2.0F));
+        PartDefinition jaw = head.addOrReplaceChild("Jaw", CubeListBuilder.create().texOffs(0, 40).addBox(-2.0F, 0.0F, -1.0F, 4.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, -4.0F));
+        PartDefinition toothL = jaw.addOrReplaceChild("ToothL", CubeListBuilder.create().texOffs(16, 40).addBox(-2.0F, 2.0F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition toothR = jaw.addOrReplaceChild("ToothR", CubeListBuilder.create().texOffs(22, 40).addBox(1.0F, 2.0F, -1.0F, 1.0F, 1.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition eyeL = head.addOrReplaceChild("EyeL", CubeListBuilder.create().texOffs(40, 18).addBox(0.0F, -4.0F, -7.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition eyeR = head.addOrReplaceChild("EyeR", CubeListBuilder.create().texOffs(52, 18).addBox(-2.0F, -4.0F, -7.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition hornL = head.addOrReplaceChild("HornL", CubeListBuilder.create().texOffs(32, 28).addBox(1.0F, -9.0F, -2.0F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition hornR = head.addOrReplaceChild("HornR", CubeListBuilder.create().texOffs(38, 28).addBox(-2.0F, -9.0F, -2.0F, 1.0F, 4.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition tail = body.addOrReplaceChild("Tail", CubeListBuilder.create().texOffs(0, 28).addBox(-1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 2.0F, 3.0F));
+        PartDefinition tailTip = tail.addOrReplaceChild("TailTip", CubeListBuilder.create().texOffs(18, 28).addBox(-1.0F, -2.0F, 0.0F, 2.0F, 3.0F, 3.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -1.0F, 6.0F));
+        PartDefinition nubL = body.addOrReplaceChild("NubL", CubeListBuilder.create().texOffs(44, 28).addBox(-2.0F, -1.0F, 3.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition nubR = body.addOrReplaceChild("NubR", CubeListBuilder.create().texOffs(50, 28).addBox(1.0F, -1.0F, 3.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
         return LayerDefinition.create(mesh, 64, 64);
     }
 
@@ -62,9 +79,18 @@ public class BabyGazeSnatcherModel extends EntityModel<LivingEntityRenderState> 
         this.head.xRot = lookX * 0.8F + Mth.sin(idle * 0.2F) * 0.08F;
         this.head.yRot = lookY;
         this.head.zRot = 0.0F;
+        this.jaw.xRot = 0.18F + Mth.sin(idle * 0.23F) * 0.1F;
+        this.jaw.yRot = 0.0F;
+        this.jaw.zRot = 0.0F;
         this.body.xRot = 0.08F;
         this.body.yRot = lookY * 0.2F;
         this.body.zRot = 0.0F;
+        this.tail.xRot = -0.35F + Mth.sin(idle * 0.18F) * 0.12F;
+        this.tail.yRot = Mth.sin(idle * 0.15F) * 0.35F;
+        this.tail.zRot = 0.0F;
+        this.tailTip.xRot = -0.45F;
+        this.tailTip.yRot = Mth.sin(idle * 0.15F + 0.6F) * 0.25F;
+        this.tailTip.zRot = 0.0F;
 
         float fore = Mth.cos(limb * 0.9F) * 1.3F * swing;
         float hind = Mth.cos(limb * 0.9F + (float) Math.PI) * 1.3F * swing;

@@ -14,8 +14,8 @@ La nuit, quand vous vous couchez, il peut apparaître devant vous. Il reste immo
 
 ### Contenu
 
-- Adulte : silhouette très haute, bras trop longs, mâchoire et griffes. Les yeux sont émissifs.
-- Bébés : toujours hostiles, rapides, lâchent 1 à 3 éclats de regard.
+- Adulte : silhouette très haute, bras trop longs, mâchoire dentée, doigts, cornes, côtes, piques dorsaux et yeux saillants émissifs.
+- Bébés : toujours hostiles, rapides, quadrupèdes (mâchoire, cornes, queue), lâchent 1 à 3 éclats de regard.
 - Amulette de veille : 4 éclats + éclat d’améthyste, ralentit le vol.
 - Infusion de clarté.
 - Œufs d’apparition dans l’onglet créatif.

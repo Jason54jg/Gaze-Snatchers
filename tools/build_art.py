@@ -61,6 +61,98 @@ def write_png(path: Path, rgba: np.ndarray) -> None:
     path.write_bytes(png)
 
 
+FACE_SHADES = {
+    "flesh": {
+        "front": (58, 54, 68),
+        "back": (34, 32, 40),
+        "left": (42, 40, 50),
+        "right": (40, 38, 48),
+        "top": (72, 68, 82),
+        "bottom": (24, 22, 28),
+    },
+    "brow": {
+        "front": (32, 28, 38),
+        "back": (22, 18, 26),
+        "left": (28, 24, 34),
+        "right": (28, 24, 34),
+        "top": (48, 42, 56),
+        "bottom": (16, 14, 20),
+    },
+    "horn": {
+        "front": (186, 168, 136),
+        "back": (112, 98, 76),
+        "left": (156, 140, 112),
+        "right": (148, 132, 104),
+        "top": (224, 208, 170),
+        "bottom": (86, 74, 58),
+    },
+    "spike": {
+        "front": (168, 152, 122),
+        "back": (96, 84, 66),
+        "left": (140, 124, 98),
+        "right": (132, 116, 92),
+        "top": (206, 188, 150),
+        "bottom": (72, 62, 48),
+    },
+    "tooth": {
+        "front": (236, 230, 214),
+        "back": (196, 188, 170),
+        "left": (220, 212, 196),
+        "right": (214, 206, 190),
+        "top": (248, 244, 232),
+        "bottom": (170, 162, 146),
+    },
+    "rib": {
+        "front": (196, 184, 162),
+        "back": (120, 110, 94),
+        "left": (168, 156, 136),
+        "right": (160, 148, 128),
+        "top": (224, 210, 186),
+        "bottom": (96, 86, 72),
+    },
+    "finger": {
+        "front": (46, 40, 52),
+        "back": (24, 20, 28),
+        "left": (36, 32, 42),
+        "right": (34, 30, 40),
+        "top": (64, 56, 72),
+        "bottom": (18, 14, 20),
+    },
+    "palm": {
+        "front": (40, 34, 46),
+        "back": (22, 18, 26),
+        "left": (32, 28, 38),
+        "right": (30, 26, 36),
+        "top": (56, 48, 64),
+        "bottom": (16, 12, 18),
+    },
+    "foot": {
+        "front": (44, 40, 50),
+        "back": (26, 24, 32),
+        "left": (36, 32, 42),
+        "right": (34, 30, 40),
+        "top": (62, 56, 70),
+        "bottom": (18, 16, 22),
+    },
+    "collar": {
+        "front": (22, 18, 28),
+        "back": (12, 10, 16),
+        "left": (18, 14, 22),
+        "right": (16, 12, 20),
+        "top": (36, 30, 44),
+        "bottom": (8, 6, 12),
+    },
+    "tail": {
+        "front": (48, 44, 58),
+        "back": (28, 26, 34),
+        "left": (38, 34, 46),
+        "right": (36, 32, 44),
+        "top": (64, 58, 74),
+        "bottom": (18, 16, 22),
+    },
+}
+
+
 def paint_texture(size: int, cubes: list[dict], eyes: list[dict], seed: int) -> tuple[np.ndarray, np.ndarray]:
     rng = np.random.default_rng(seed)
     img = np.zeros((size, size, 4), dtype=np.uint8)
@@ -82,27 +174,42 @@ def paint_texture(size: int, cubes: list[dict], eyes: list[dict], seed: int) -> 
         img[v : v + h, u : u + w, :3] = color
         img[v : v + h, u : u + w, 3] = 255
 
-    shades = {
-        "front": (58, 54, 68),
-        "back": (34, 32, 40),
-        "left": (42, 40, 50),
-        "right": (40, 38, 48),
-        "top": (72, 68, 82),
-        "bottom": (24, 22, 28),
-    }
     for cube in cubes:
+        style = cube.get("style", "flesh")
         rects = box_uv_rects(cube["uv"][0], cube["uv"][1], cube["w"], cube["h"], cube["d"])
+        if style == "glow":
+            for face, rect in rects.items():
+                u, v, w, h = rect
+                img[v : v + h, u : u + w, :3] = (236, 244, 255)
+                img[v : v + h, u : u + w, 3] = 255
+                glow[v : v + h, u : u + w] = (255, 255, 255, 255)
+                if face == "front" and w >= 2 and h >= 2:
+                    px0 = u + w // 2
+                    img[v : v + h, px0 : px0 + 1, :3] = (18, 12, 24)
+                    glow[v : v + h, px0 : px0 + 1] = (0, 0, 0, 0)
+            continue
+        shades = FACE_SHADES.get(style, FACE_SHADES["flesh"])
+        if style in ("tooth", "horn", "spike", "rib"):
+            vein_strength = 0.12
+        elif style in ("finger", "palm", "foot", "tail") or cube.get("limb"):
+            vein_strength = 0.4
+        elif style == "collar":
+            vein_strength = 0.55
+        else:
+            vein_strength = 0.3
         for face, rect in rects.items():
-            fill(rect, shades[face], 0.45 if cube.get("limb") else 0.3)
+            fill(rect, shades[face], vein_strength)
 
     for eye in eyes:
         u, v, w, h = eye["rect"]
         img[v : v + h, u : u + w, :3] = (12, 10, 16)
         img[v : v + h, u : u + w, 3] = 255
-        for ex, ey, ew, eh in eye["eyes"]:
+        for ex, ey, ew, eh in eye.get("sockets", []):
+            img[ey : ey + eh, ex : ex + ew, :3] = (8, 6, 12)
+            img[ey : ey + eh, ex : ex + ew, 3] = 255
+        for ex, ey, ew, eh in eye.get("eyes", []):
             img[ey : ey + eh, ex : ex + ew, :3] = (244, 248, 255)
             glow[ey : ey + eh, ex : ex + ew] = (255, 255, 255, 255)
-            # pupille verticale
             px0 = ex + ew // 2
             img[ey : ey + eh, px0 : px0 + 1, :3] = (20, 16, 28)
             glow[ey : ey + eh, px0 : px0 + 1] = (0, 0, 0, 0)
@@ -148,12 +255,39 @@ def child_java(var: str, parent_var: str, name: str, parent_pivot, pivot, frm, t
     ox, oy, oz = mc_offset(pivot)
     px, py, pz = mc_offset(parent_pivot)
     return (
-        f'        {parent_var}.addOrReplaceChild("{name}", '
+        f'        PartDefinition {var} = {parent_var}.addOrReplaceChild("{name}", '
         f"CubeListBuilder.create().texOffs({uv[0]}, {uv[1]})"
         f".addBox({fnum(x)}, {fnum(y)}, {fnum(z)}, {fnum(w)}, {fnum(h)}, {fnum(d)}, "
         f"new CubeDeformation(0.0F)), "
         f"PartPose.offset({fnum(ox - px)}, {fnum(oy - py)}, {fnum(oz - pz)}));"
     )
+
+
+def java_name(bone: str) -> str:
+    return bone[0].lower() + bone[1:]
+
+
+def append_children(lines: list[str], spec: dict, parent_vars: dict, pivots: dict) -> None:
+    seen = set(parent_vars)
+    for child in spec["children"]:
+        if child["bone"] in seen:
+            raise SystemExit(f"os en double : {child['bone']}")
+        seen.add(child["bone"])
+        var = java_name(child["bone"])
+        lines.append(
+            child_java(
+                var,
+                parent_vars[child["parent"]],
+                child["bone"],
+                pivots[child["parent"]],
+                child["pivot"],
+                child["from"],
+                child["to"],
+                child["uv"],
+            )
+        )
+        parent_vars[child["bone"]] = var
+        pivots[child["bone"]] = child["pivot"]
 
 
 ADULT = {
@@ -168,30 +302,40 @@ ADULT = {
         {"bone": "RightLeg", "pivot": (-2, 22, 0), "from": (-3.5, 0, -1.5), "to": (-0.5, 22, 1.5), "uv": (72, 28), "limb": True},
     ],
     "children": [
-        {
-            "bone": "Jaw",
-            "parent": "Head",
-            "pivot": (0, 37, -6),
-            "from": (-4, 34, -7),
-            "to": (4, 37, -5),
-            "uv": (0, 64),
-        },
-        {
-            "bone": "Claw",
-            "parent": "LeftArm",
-            "pivot": (4.5, 6, -1),
-            "from": (3, 3, -3),
-            "to": (6, 6, -1),
-            "uv": (88, 28),
-        },
-        {
-            "bone": "Claw",
-            "parent": "RightArm",
-            "pivot": (-4.5, 6, -1),
-            "from": (-6, 3, -3),
-            "to": (-3, 6, -1),
-            "uv": (104, 28),
-        },
+        {"bone": "Jaw", "parent": "Head", "pivot": (0, 37, -6), "from": (-4, 34, -7), "to": (4, 37, -5), "uv": (0, 64)},
+        {"bone": "ToothL", "parent": "Jaw", "pivot": (0, 37, -6), "from": (-4, 31, -8), "to": (-2, 34, -6), "uv": (48, 70), "style": "tooth"},
+        {"bone": "ToothR", "parent": "Jaw", "pivot": (0, 37, -6), "from": (2, 31, -8), "to": (4, 34, -6), "uv": (58, 70), "style": "tooth"},
+        {"bone": "ToothM", "parent": "Jaw", "pivot": (0, 37, -6), "from": (-1, 30, -8), "to": (1, 34, -6), "uv": (68, 70), "style": "tooth"},
+        {"bone": "Brow", "parent": "Head", "pivot": (0, 34, 0), "from": (-5, 42, -9), "to": (5, 44, -5), "uv": (0, 70), "style": "brow"},
+        {"bone": "HornL", "parent": "Head", "pivot": (0, 34, 0), "from": (2, 46, -2), "to": (4, 49, 0), "uv": (28, 70), "style": "horn"},
+        {"bone": "HornR", "parent": "Head", "pivot": (0, 34, 0), "from": (-4, 46, -2), "to": (-2, 49, 0), "uv": (38, 70), "style": "horn"},
+        {"bone": "HornLTip", "parent": "Head", "pivot": (0, 34, 0), "from": (2, 49, -1), "to": (3, 53, 0), "uv": (28, 76), "style": "horn"},
+        {"bone": "HornRTip", "parent": "Head", "pivot": (0, 34, 0), "from": (-3, 49, -1), "to": (-2, 53, 0), "uv": (38, 76), "style": "horn"},
+        {"bone": "EyeL", "parent": "Head", "pivot": (0, 34, 0), "from": (1, 39, -10), "to": (4, 43, -6), "uv": (88, 0), "style": "glow"},
+        {"bone": "EyeR", "parent": "Head", "pivot": (0, 34, 0), "from": (-4, 39, -10), "to": (-1, 43, -6), "uv": (104, 0), "style": "glow"},
+        {"bone": "Collar", "parent": "Body", "pivot": (0, 34, 0), "from": (-4, 33, -3), "to": (4, 35, 2), "uv": (22, 90), "style": "collar"},
+        {"bone": "Rib1", "parent": "Body", "pivot": (0, 34, 0), "from": (-4, 27, -4), "to": (4, 29, -2), "uv": (0, 82), "style": "rib"},
+        {"bone": "Rib2", "parent": "Body", "pivot": (0, 34, 0), "from": (-4, 23, -4), "to": (4, 25, -2), "uv": (0, 88), "style": "rib"},
+        {"bone": "Rib3", "parent": "Body", "pivot": (0, 34, 0), "from": (-4, 19, -4), "to": (4, 21, -2), "uv": (0, 94), "style": "rib"},
+        {"bone": "Spike1", "parent": "Body", "pivot": (0, 34, 0), "from": (-1, 30, 2), "to": (1, 34, 4), "uv": (70, 78), "style": "spike"},
+        {"bone": "Spike2", "parent": "Body", "pivot": (0, 34, 0), "from": (-1, 24, 2), "to": (1, 28, 4), "uv": (80, 78), "style": "spike"},
+        {"bone": "Spike3", "parent": "Body", "pivot": (0, 34, 0), "from": (-1, 18, 2), "to": (1, 22, 4), "uv": (90, 78), "style": "spike"},
+        {"bone": "PalmL", "parent": "LeftArm", "pivot": (4.5, 32, 0), "from": (2, 4, -3), "to": (7, 7, -1), "uv": (88, 28), "style": "palm"},
+        {"bone": "PalmR", "parent": "RightArm", "pivot": (-4.5, 32, 0), "from": (-7, 4, -3), "to": (-2, 7, -1), "uv": (104, 28), "style": "palm"},
+        {"bone": "FingerL1", "parent": "LeftArm", "pivot": (4.5, 32, 0), "from": (2, 1, -5), "to": (3, 6, -2), "uv": (0, 100), "style": "finger"},
+        {"bone": "FingerL2", "parent": "LeftArm", "pivot": (4.5, 32, 0), "from": (4, 0, -7), "to": (5, 5, -4), "uv": (10, 100), "style": "finger"},
+        {"bone": "FingerL3", "parent": "LeftArm", "pivot": (4.5, 32, 0), "from": (6, 1, -5), "to": (7, 6, -2), "uv": (20, 100), "style": "finger"},
+        {"bone": "FingerR1", "parent": "RightArm", "pivot": (-4.5, 32, 0), "from": (-3, 1, -5), "to": (-2, 6, -2), "uv": (30, 100), "style": "finger"},
+        {"bone": "FingerR2", "parent": "RightArm", "pivot": (-4.5, 32, 0), "from": (-5, 0, -7), "to": (-4, 5, -4), "uv": (40, 100), "style": "finger"},
+        {"bone": "FingerR3", "parent": "RightArm", "pivot": (-4.5, 32, 0), "from": (-7, 1, -5), "to": (-6, 6, -2), "uv": (50, 100), "style": "finger"},
+        {"bone": "ClawL1", "parent": "LeftArm", "pivot": (4.5, 32, 0), "from": (2, 0, -7), "to": (3, 2, -5), "uv": (0, 112), "style": "tooth"},
+        {"bone": "ClawL2", "parent": "LeftArm", "pivot": (4.5, 32, 0), "from": (4, 0, -9), "to": (5, 2, -7), "uv": (8, 112), "style": "tooth"},
+        {"bone": "ClawL3", "parent": "LeftArm", "pivot": (4.5, 32, 0), "from": (6, 0, -7), "to": (7, 2, -5), "uv": (16, 112), "style": "tooth"},
+        {"bone": "ClawR1", "parent": "RightArm", "pivot": (-4.5, 32, 0), "from": (-3, 0, -7), "to": (-2, 2, -5), "uv": (24, 112), "style": "tooth"},
+        {"bone": "ClawR2", "parent": "RightArm", "pivot": (-4.5, 32, 0), "from": (-5, 0, -9), "to": (-4, 2, -7), "uv": (32, 112), "style": "tooth"},
+        {"bone": "ClawR3", "parent": "RightArm", "pivot": (-4.5, 32, 0), "from": (-7, 0, -7), "to": (-6, 2, -5), "uv": (40, 112), "style": "tooth"},
+        {"bone": "FootL", "parent": "LeftLeg", "pivot": (2, 22, 0), "from": (0, 0, -4), "to": (4, 2, -1), "uv": (56, 64), "style": "foot"},
+        {"bone": "FootR", "parent": "RightLeg", "pivot": (-2, 22, 0), "from": (-4, 0, -4), "to": (0, 2, -1), "uv": (72, 64), "style": "foot"},
     ],
 }
 
@@ -206,7 +350,19 @@ BABY = {
         {"bone": "Left_Hindleg", "pivot": (2, 3, 2), "from": (1, 0, 1), "to": (3, 3, 3), "uv": (44, 0), "limb": True},
         {"bone": "Right_Hindleg", "pivot": (-2, 3, 2), "from": (-3, 0, 1), "to": (-1, 3, 3), "uv": (52, 0), "limb": True},
     ],
-    "children": [],
+    "children": [
+        {"bone": "Jaw", "parent": "Head", "pivot": (0, 6, -5), "from": (-2, 4, -6), "to": (2, 6, -4), "uv": (0, 40)},
+        {"bone": "ToothL", "parent": "Jaw", "pivot": (0, 6, -5), "from": (-2, 3, -6), "to": (-1, 4, -5), "uv": (16, 40), "style": "tooth"},
+        {"bone": "ToothR", "parent": "Jaw", "pivot": (0, 6, -5), "from": (1, 3, -6), "to": (2, 4, -5), "uv": (22, 40), "style": "tooth"},
+        {"bone": "EyeL", "parent": "Head", "pivot": (0, 5, -1), "from": (0, 7, -8), "to": (2, 9, -5), "uv": (40, 18), "style": "glow"},
+        {"bone": "EyeR", "parent": "Head", "pivot": (0, 5, -1), "from": (-2, 7, -8), "to": (0, 9, -5), "uv": (52, 18), "style": "glow"},
+        {"bone": "HornL", "parent": "Head", "pivot": (0, 5, -1), "from": (1, 10, -3), "to": (2, 14, -2), "uv": (32, 28), "style": "horn"},
+        {"bone": "HornR", "parent": "Head", "pivot": (0, 5, -1), "from": (-2, 10, -3), "to": (-1, 14, -2), "uv": (38, 28), "style": "horn"},
+        {"bone": "Tail", "parent": "Body", "pivot": (0, 3, 3), "from": (-1, 2, 3), "to": (1, 4, 9), "uv": (0, 28), "style": "tail"},
+        {"bone": "TailTip", "parent": "Tail", "pivot": (0, 4, 9), "from": (-1, 3, 9), "to": (1, 6, 12), "uv": (18, 28), "style": "tail"},
+        {"bone": "NubL", "parent": "Body", "pivot": (0, 5, 0), "from": (-2, 4, 3), "to": (-1, 6, 4), "uv": (44, 28), "style": "spike"},
+        {"bone": "NubR", "parent": "Body", "pivot": (0, 5, 0), "from": (1, 4, 3), "to": (2, 6, 4), "uv": (50, 28), "style": "spike"},
+    ],
 }
 
 
@@ -226,7 +382,7 @@ def adult_eyes(cubes):
     u, v, w, h = rect
     return [{
         "rect": rect,
-        "eyes": [(u + 2, v + 3, 3, 4), (u + 7, v + 3, 3, 4)],
+        "sockets": [(u + 2, v + 3, 3, 4), (u + 7, v + 3, 3, 4)],
         "mouth": (u + 3, v + 8, 6, 2),
     }]
 
@@ -237,7 +393,7 @@ def baby_eyes(cubes):
     u, v, w, h = rect
     return [{
         "rect": rect,
-        "eyes": [(u + 1, v + 1, 1, 2), (u + 4, v + 1, 1, 2)],
+        "sockets": [(u + 1, v + 1, 1, 2), (u + 4, v + 1, 1, 2)],
         "mouth": (u + 1, v + 4, 4, 1),
     }]
 
@@ -292,7 +448,10 @@ def build_bbmodel(spec: dict, texture_name: str, png_bytes: bytes) -> dict:
             "export": True,
             "children": [element["uuid"]],
         }
+        if child["parent"] not in bones:
+            raise SystemExit(f"os parent inconnu : {child['parent']}")
         bones[child["parent"]]["children"].append(node)
+        bones[child["bone"]] = node
 
     root = {
         "name": "Root",
@@ -446,22 +605,11 @@ def adult_java(spec: dict) -> None:
         "LeftLeg": "leftLeg",
         "RightLeg": "rightLeg",
     }
+    pivots = {}
     for cube in spec["cubes"]:
         lines.append(cube_java(variables[cube["bone"]], cube["bone"], cube["pivot"], cube["from"], cube["to"], cube["uv"]))
-    parent_vars = {"Head": "head", "LeftArm": "leftArm", "RightArm": "rightArm"}
-    for child in spec["children"]:
-        lines.append(
-            child_java(
-                "ignored",
-                parent_vars[child["parent"]],
-                child["bone"],
-                next(c["pivot"] for c in spec["cubes"] if c["bone"] == child["parent"]),
-                child["pivot"],
-                child["from"],
-                child["to"],
-                child["uv"],
-            )
-        )
+        pivots[cube["bone"]] = cube["pivot"]
+    append_children(lines, spec, variables, pivots)
     fields = """    private final ModelPart head;
     private final ModelPart jaw;
     private final ModelPart body;
@@ -524,17 +672,26 @@ def baby_java(spec: dict) -> None:
         "Left_Hindleg": "leftHind",
         "Right_Hindleg": "rightHind",
     }
+    pivots = {}
     for cube in spec["cubes"]:
         lines.append(cube_java(variables[cube["bone"]], cube["bone"], cube["pivot"], cube["from"], cube["to"], cube["uv"]))
+        pivots[cube["bone"]] = cube["pivot"]
+    append_children(lines, spec, variables, pivots)
     fields = """    private final ModelPart head;
+    private final ModelPart jaw;
     private final ModelPart body;
+    private final ModelPart tail;
+    private final ModelPart tailTip;
     private final ModelPart leftFore;
     private final ModelPart rightFore;
     private final ModelPart leftHind;
     private final ModelPart rightHind;
 """
     ctor = """        this.head = root.getChild("Head");
+        this.jaw = this.head.getChild("Jaw");
         this.body = root.getChild("Body");
+        this.tail = this.body.getChild("Tail");
+        this.tailTip = this.tail.getChild("TailTip");
         this.leftFore = root.getChild("Left_Foreleg");
         this.rightFore = root.getChild("Right_Foreleg");
         this.leftHind = root.getChild("Left_Hindleg");
@@ -549,9 +706,18 @@ def baby_java(spec: dict) -> None:
         this.head.xRot = lookX * 0.8F + Mth.sin(idle * 0.2F) * 0.08F;
         this.head.yRot = lookY;
         this.head.zRot = 0.0F;
+        this.jaw.xRot = 0.18F + Mth.sin(idle * 0.23F) * 0.1F;
+        this.jaw.yRot = 0.0F;
+        this.jaw.zRot = 0.0F;
         this.body.xRot = 0.08F;
         this.body.yRot = lookY * 0.2F;
         this.body.zRot = 0.0F;
+        this.tail.xRot = -0.35F + Mth.sin(idle * 0.18F) * 0.12F;
+        this.tail.yRot = Mth.sin(idle * 0.15F) * 0.35F;
+        this.tail.zRot = 0.0F;
+        this.tailTip.xRot = -0.45F;
+        this.tailTip.yRot = Mth.sin(idle * 0.15F + 0.6F) * 0.25F;
+        this.tailTip.zRot = 0.0F;
 
         float fore = Mth.cos(limb * 0.9F) * 1.3F * swing;
         float hind = Mth.cos(limb * 0.9F + (float) Math.PI) * 1.3F * swing;
@@ -806,38 +972,54 @@ def render_gallery(models: list[tuple[str, dict, np.ndarray, np.ndarray]]) -> No
     adult_spec, adult_tex, adult_glow = models[0]
     baby_spec, baby_tex, baby_glow = models[1]
     shots = [
-        ("gaze-snatcher.png", [quads_for(adult_spec, adult_tex, (0, 0, 0))], (26, 30, -38), (0, 22, 0)),
-        ("baby-gaze-snatcher.png", [quads_for(baby_spec, baby_tex, (0, 0, 0))], (12, 8, -18), (0, 5, 0)),
+        ("gaze-snatcher.png", [quads_for(adult_spec, adult_tex, (0, 0, 0))], (32, 34, -46), (0, 24, 0), 600),
+        ("baby-gaze-snatcher.png", [quads_for(baby_spec, baby_tex, (0, 0, 0))], (16, 11, -20), (1, 5, 1), 760),
         (
             "gaze-snatchers.png",
             [
                 quads_for(adult_spec, adult_tex, (0, 0, 0)),
                 quads_for(baby_spec, baby_tex, (12, 0, 4)),
             ],
-            (34, 28, -42),
-            (5, 16, 0),
+            (40, 32, -48),
+            (6, 18, 2),
+            520,
         ),
     ]
-    for filename, posed, eye, target in shots:
-        image = project(posed, eye, target, 1280, 720, 820)
+    for filename, posed, eye, target, fov in shots:
+        image = project(posed, eye, target, 1280, 720, fov)
         write_png(GALLERY / filename, image)
-        # couche émissive additionnée sur le portrait adulte
-    eye = (8, 42, -18)
-    target = (0, 40, 0)
+    eye = (10, 44, -22)
+    target = (0, 41, 0)
     portrait_quads = quads_for(adult_spec, adult_tex, (0, 0, 0))
     glow_quads = quads_for(adult_spec, adult_glow, (0, 0, 0))
-    base = project([portrait_quads], eye, target, 960, 960, 780)
-    glow = project([glow_quads], eye, target, 960, 960, 780)
+    base = project([portrait_quads], eye, target, 960, 960, 620)
+    glow = project([glow_quads], eye, target, 960, 960, 620)
     added = np.clip(base.astype(np.int16) + (glow.astype(np.int16) // 3), 0, 255).astype(np.uint8)
     write_png(GALLERY / "gaze-snatcher-eyes.png", added)
+
+
+def assert_atlas(size: int, cubes: list[dict]) -> None:
+    seen: list[tuple[tuple[int, int, int, int], str]] = []
+    for cube in cubes:
+        rects = box_uv_rects(cube["uv"][0], cube["uv"][1], cube["w"], cube["h"], cube["d"])
+        for rect in rects.values():
+            u, v, w, h = rect
+            if w <= 0 or h <= 0 or u < 0 or v < 0 or u + w > size or v + h > size:
+                raise SystemExit(f"UV hors atlas pour {cube['bone']} : {rect} (texture {size})")
+            for prev, name in seen:
+                pu, pv, pw, ph = prev
+                if u < pu + pw and pu < u + w and v < pv + ph and pv < v + h:
+                    raise SystemExit(f"UV en chevauchement : {cube['bone']} {rect} et {name} {prev}")
+            seen.append((rect, cube["bone"]))
 
 
 def prepare(spec: dict, eyes_fn, seed: int):
     cubes = [cube_dims(c) for c in spec["cubes"]]
     children = [cube_dims(c) for c in spec["children"]]
     spec = {**spec, "cubes": cubes, "children": children}
-    eyes = eyes_fn(cubes)
     paint_cubes = cubes + children
+    assert_atlas(spec["tex"], paint_cubes)
+    eyes = eyes_fn(cubes)
     image, glow = paint_texture(spec["tex"], paint_cubes, eyes, seed)
     return spec, image, glow
 
@@ -859,7 +1041,19 @@ def main() -> None:
         (BB / f"{spec['name']}.bbmodel").write_text(json.dumps(model, indent=2) + "\n")
     adult_java(adult)
     baby_java(baby)
-    synth_sounds()
+    sound_names = (
+        "gaze_snatcher_ambient",
+        "gaze_snatcher_spawn",
+        "gaze_snatcher_steal",
+        "gaze_snatcher_death",
+        "baby_gaze_snatcher_ambient",
+        "baby_gaze_snatcher_hurt",
+        "baby_gaze_snatcher_death",
+    )
+    if all((SND / f"{name}.ogg").exists() for name in sound_names):
+        print("sons conservés")
+    else:
+        synth_sounds()
     render_gallery([(adult, adult_img, adult_glow), (baby, baby_img, baby_glow)])
     print("art prêt")
 
