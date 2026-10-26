@@ -15,19 +15,31 @@ public final class GazeSnatchers {
     public static final String MOD_ID = "gazesnatchers";
     public static final Logger LOGGER = LoggerFactory.getLogger("Gaze Snatchers");
 
+    /** Fabric / loaders that allow {@code Registry.register} during mod init. */
     public static void init() {
         LOGGER.info("Initialisation de Gaze Snatchers…");
+        initEarly();
+        registerContent();
+        LOGGER.info("Gaze Snatchers prêt (MC {}).", GazeSnatchersConstants.MINECRAFT_RANGE);
+    }
+
+    /**
+     * NeoForge : config + hooks only. Content must be registered from {@code RegisterEvent}
+     * via {@link #registerContent} or platform registrar overloads.
+     */
+    public static void initEarly() {
         GazeSnatchersConfig.load();
+        SleepWatcher.registerPlatformHooks();
+        registerPlatformCommands();
+    }
+
+    public static void registerContent() {
         ModSounds.register();
         ModMobEffects.register();
         ModEntities.register();
         ModItems.register();
         ModItems.registerSpawnEggs();
         ModCreativeTabs.register();
-
-        SleepWatcher.registerPlatformHooks();
-        registerPlatformCommands();
-        LOGGER.info("Gaze Snatchers prêt (MC {}).", GazeSnatchersConstants.MINECRAFT_RANGE);
     }
 
     public static Identifier id(String path) {

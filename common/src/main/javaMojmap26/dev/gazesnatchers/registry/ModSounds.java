@@ -1,7 +1,7 @@
 package dev.gazesnatchers.registry;
 
-import dev.gazesnatchers.GazeSnatchers;
-import net.minecraft.core.registries.BuiltInRegistries;
+import java.util.function.BiConsumer;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 
 public final class ModSounds {
@@ -14,17 +14,28 @@ public final class ModSounds {
     public static SoundEvent BABY_GAZE_SNATCHER_DEATH;
 
     public static void register() {
-        GAZE_SNATCHER_AMBIENT = register("gaze_snatcher_ambient");
-        GAZE_SNATCHER_SPAWN = register("gaze_snatcher_spawn");
-        GAZE_SNATCHER_STEAL = register("gaze_snatcher_steal");
-        GAZE_SNATCHER_DEATH = register("gaze_snatcher_death");
-        BABY_GAZE_SNATCHER_AMBIENT = register("baby_gaze_snatcher_ambient");
-        BABY_GAZE_SNATCHER_HURT = register("baby_gaze_snatcher_hurt");
-        BABY_GAZE_SNATCHER_DEATH = register("baby_gaze_snatcher_death");
+        register(null);
     }
 
-    private static SoundEvent register(String path) {
-        return RegistryHelper.registerSound(path);
+    /** NeoForge : passer {@code helper::register} depuis {@code RegisterEvent}. */
+    public static void register(BiConsumer<Identifier, SoundEvent> registrar) {
+        if (registrar == null) {
+            GAZE_SNATCHER_AMBIENT = RegistryHelper.registerSound("gaze_snatcher_ambient");
+            GAZE_SNATCHER_SPAWN = RegistryHelper.registerSound("gaze_snatcher_spawn");
+            GAZE_SNATCHER_STEAL = RegistryHelper.registerSound("gaze_snatcher_steal");
+            GAZE_SNATCHER_DEATH = RegistryHelper.registerSound("gaze_snatcher_death");
+            BABY_GAZE_SNATCHER_AMBIENT = RegistryHelper.registerSound("baby_gaze_snatcher_ambient");
+            BABY_GAZE_SNATCHER_HURT = RegistryHelper.registerSound("baby_gaze_snatcher_hurt");
+            BABY_GAZE_SNATCHER_DEATH = RegistryHelper.registerSound("baby_gaze_snatcher_death");
+            return;
+        }
+        GAZE_SNATCHER_AMBIENT = RegistryHelper.registerSound("gaze_snatcher_ambient", registrar);
+        GAZE_SNATCHER_SPAWN = RegistryHelper.registerSound("gaze_snatcher_spawn", registrar);
+        GAZE_SNATCHER_STEAL = RegistryHelper.registerSound("gaze_snatcher_steal", registrar);
+        GAZE_SNATCHER_DEATH = RegistryHelper.registerSound("gaze_snatcher_death", registrar);
+        BABY_GAZE_SNATCHER_AMBIENT = RegistryHelper.registerSound("baby_gaze_snatcher_ambient", registrar);
+        BABY_GAZE_SNATCHER_HURT = RegistryHelper.registerSound("baby_gaze_snatcher_hurt", registrar);
+        BABY_GAZE_SNATCHER_DEATH = RegistryHelper.registerSound("baby_gaze_snatcher_death", registrar);
     }
 
     private ModSounds() {

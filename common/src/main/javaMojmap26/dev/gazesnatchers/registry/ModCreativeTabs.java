@@ -1,8 +1,10 @@
 package dev.gazesnatchers.registry;
 
 import dev.gazesnatchers.GazeSnatchers;
+import java.util.function.BiConsumer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
@@ -18,13 +20,20 @@ public final class ModCreativeTabs {
     public static CreativeModeTab MAIN;
 
     public static void register() {
-        MAIN = net.minecraft.core.Registry.register(
-                BuiltInRegistries.CREATIVE_MODE_TAB,
-                TAB_KEY,
-                CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
-                        .title(Component.translatable("itemGroup.gazesnatchers.main"))
-                        .icon(() -> new ItemStack(ModItems.GAZE_SHARD))
-                        .build());
+        register(null);
+    }
+
+    public static void register(BiConsumer<Identifier, CreativeModeTab> registrar) {
+        CreativeModeTab tab = CreativeModeTab.builder(CreativeModeTab.Row.TOP, 0)
+                .title(Component.translatable("itemGroup.gazesnatchers.main"))
+                .icon(() -> new ItemStack(ModItems.GAZE_SHARD))
+                .build();
+        if (registrar == null) {
+            MAIN = net.minecraft.core.Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, TAB_KEY, tab);
+        } else {
+            registrar.accept(TAB_KEY.identifier(), tab);
+            MAIN = tab;
+        }
     }
 
     private ModCreativeTabs() {

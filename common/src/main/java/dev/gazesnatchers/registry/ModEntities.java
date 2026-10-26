@@ -3,9 +3,11 @@ package dev.gazesnatchers.registry;
 import dev.gazesnatchers.GazeSnatchers;
 import dev.gazesnatchers.entity.BabyGazeSnatcherEntity;
 import dev.gazesnatchers.entity.GazeSnatcherEntity;
+import java.util.function.BiConsumer;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -17,13 +19,18 @@ public final class ModEntities {
     public static EntityType<BabyGazeSnatcherEntity> BABY_GAZE_SNATCHER;
 
     public static void register() {
+        register(null);
+    }
+
+    public static void register(BiConsumer<Identifier, EntityType<?>> registrar) {
         GAZE_SNATCHER = register(
                 "gaze_snatcher",
                 EntityType.Builder.of(GazeSnatcherEntity::new, MobCategory.MONSTER)
                         .sized(0.7F, 3.1F)
                         .eyeHeight(2.85F)
                         .clientTrackingRange(10)
-                        .updateInterval(3));
+                        .updateInterval(3),
+                registrar);
 
         BABY_GAZE_SNATCHER = register(
                 "baby_gaze_snatcher",
@@ -31,13 +38,23 @@ public final class ModEntities {
                         .sized(0.7F, 0.65F)
                         .eyeHeight(0.5F)
                         .clientTrackingRange(8)
-                        .updateInterval(2));
+                        .updateInterval(2),
+                registrar);
     }
 
-    private static <T extends net.minecraft.world.entity.Entity> EntityType<T> register(String path, EntityType.Builder<T> builder) {
+    @SuppressWarnings("unchecked")
+    private static <T extends Entity> EntityType<T> register(
+            String path,
+            EntityType.Builder<T> builder,
+            BiConsumer<Identifier, EntityType<?>> registrar) {
         Identifier id = GazeSnatchers.id(path);
         ResourceKey<EntityType<?>> key = ResourceKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE, id);
-        return net.minecraft.core.Registry.register(BuiltInRegistries.ENTITY_TYPE, id, builder.build(key));
+        EntityType<T> type = builder.build(key);
+        if (registrar == null) {
+            return net.minecraft.core.Registry.register(BuiltInRegistries.ENTITY_TYPE, id, type);
+        }
+        registrar.accept(id, type);
+        return type;
     }
 
     public static AttributeSupplier.Builder gazeSnatcherAttributes() {
