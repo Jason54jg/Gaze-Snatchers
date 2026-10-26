@@ -1,0 +1,30 @@
+{
+  "gaze_snatcher_ambient": {
+    "subtitle": "subtitles.gazesnatchers.gaze_snatcher_ambient",
+    "sounds": [{ "name": "gazesnatchers:gaze_snatcher_ambient", "volume": 0.95, "pitch": 0.85 }]
+  },
+  "gaze_snatcher_spawn": {
+    "subtitle": "subtitles.gazesnatchers.gaze_snatcher_spawn",
+    "sounds": [{ "name": "gazesnatchers:gaze_snatcher_spawn", "volume": 1.1, "pitch": 0.75 }]
+  },
+  "gaze_snatcher_steal": {
+    "subtitle": "subtitles.gazesnatchers.gaze_snatcher_steal",
+    "sounds": [{ "name": "gazesnatchers:gaze_snatcher_steal", "volume": 1.0, "pitch": 1.05 }]
+  },
+  "gaze_snatcher_death": {
+    "subtitle": "subtitles.gazesnatchers.gaze_snatcher_death",
+    "sounds": [{ "name": "gazesnatchers:gaze_snatcher_death", "volume": 1.15, "pitch": 0.9 }]
+  },
+  "baby_gaze_snatcher_ambient": {
+    "subtitle": "subtitles.gazesnatchers.baby_gaze_snatcher_ambient",
+    "sounds": [{ "name": "gazesnatchers:baby_gaze_snatcher_ambient", "volume": 0.85, "pitch": 1.35 }]
+  },
+  "baby_gaze_snatcher_hurt": {
+    "subtitle": "subtitles.gazesnatchers.baby_gaze_snatcher_hurt",
+    "sounds": [{ "name": "gazesnatchers:baby_gaze_snatcher_hurt", "volume": 0.9, "pitch": 1.2 }]
+  },
+  "baby_gaze_snatcher_death": {
+    "subtitle": "subtitles.gazesnatchers.baby_gaze_snatcher_death",
+    "sounds": [{ "name": "gazesnatchers:baby_gaze_snatcher_death", "volume": 1.0, "pitch": 1.1 }]
+  }
+}

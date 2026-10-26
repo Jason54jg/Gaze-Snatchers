@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "conditions": [
+        { "condition": "minecraft:killed_by_player" }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "gazesnatchers:gaze_shard",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": { "min": 0, "max": 2 }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

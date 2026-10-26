@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "gazesnatchers",
+  "version": "${version}",
+  "name": "Gaze Snatchers",
+  "description": "Un mob inquiétant qui apparaît quand vous dormez et peut voler un item de votre inventaire.",
+  "authors": ["Gaze Snatchers Team"],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/gaze-snatchers",
+    "sources": "https://github.com/gazesnatchers/gaze-snatchers"
+  },
+  "license": "MIT",
+  "icon": "assets/gazesnatchers/textures/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.gazesnatchers.fabric.GazeSnatchersFabric"],
+    "client": ["dev.gazesnatchers.fabric.GazeSnatchersFabricClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.20.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}
